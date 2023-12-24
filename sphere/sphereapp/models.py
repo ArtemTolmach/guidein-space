@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+class PhotoSphere(models.Model):
+    title = models.CharField(max_length=255)
+    image_path = models.ImageField(upload_to='images/')

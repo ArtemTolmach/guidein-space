@@ -43,7 +43,6 @@ movePoint.addEventListener('click', () => {
     viewer.setPanorama(panoramaImage2);
 });
 
-
 panoramaImage.add(point, point2, movePoint);
 
 // Элементы ВТОРОЙ фотосферы
@@ -82,7 +81,7 @@ firstSphereBtn.addEventListener('click', () => {
     const menuHamburger = document.querySelector(".menu-hamburger");
 
     navLinks.classList.toggle('mobile-menu')
-    menuHamburger.classList.remove('active'); 
+    menuHamburger.classList.remove('active');
 });
 
 const secondSphereBtn = document.getElementById('SecondPhotoSphereLink');
@@ -94,3 +93,34 @@ secondSphereBtn.addEventListener('click', () => {
     navLinks.classList.toggle('mobile-menu')
     menuHamburger.classList.remove('active');
 });
+
+// Динамическое создание фотосфер
+fetch('/api/photospheres/')
+    .then(response => response.json())
+    .then(data => {
+        const navLinks = document.querySelector(".nav-links ul");
+
+        data.forEach((photoSphere, index) => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '#';
+            a.innerText = photoSphere.title;
+
+            const mediaBaseUrl = '/media/';
+            const imagePath = photoSphere.image_path;
+            const fullImagePath = mediaBaseUrl + imagePath;
+            const addpanorama = new PANOLENS.ImagePanorama(fullImagePath);
+
+            a.addEventListener('click', () => {
+                switchToPanorama(addpanorama);
+                const navLinks = document.querySelector(".nav-links")
+                const menuHamburger = document.querySelector(".menu-hamburger");
+
+                navLinks.classList.toggle('mobile-menu')
+                menuHamburger.classList.remove('active');
+            });
+
+            li.appendChild(a);
+            navLinks.appendChild(li);
+        });
+    });
