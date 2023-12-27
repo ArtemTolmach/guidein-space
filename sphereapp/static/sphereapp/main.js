@@ -94,7 +94,7 @@ secondSphereBtn.addEventListener('click', () => {
     menuHamburger.classList.remove('active');
 });
 
-// Динамическое создание фотосфер
+// Динамическое создание фотосфер и точек перемещения
 fetch('/api/photospheres/')
     .then(response => response.json())
     .then(data => {
@@ -113,14 +113,32 @@ fetch('/api/photospheres/')
 
             a.addEventListener('click', () => {
                 switchToPanorama(addpanorama);
-                const navLinks = document.querySelector(".nav-links")
+                const navLinks = document.querySelector(".nav-links");
                 const menuHamburger = document.querySelector(".menu-hamburger");
 
                 navLinks.classList.toggle('mobile-menu')
                 menuHamburger.classList.remove('active');
+
+                // Создание точек перемещения
+                photoSphere.teleportation_points.forEach(point => {
+                    const teleportationPoint = new PANOLENS.Infospot(350, 'static/sphereapp/images/move3.png');
+                    teleportationPoint.position.set(point.x, point.y, point.z);
+
+                    teleportationPoint.addEventListener('click', () => {
+                        // Находим целевую фотосферу по её названию
+                        const targetPanorama = data.find(pano => pano.title === point.target_photo_sphere);
+
+                        const target_sphere = new PANOLENS.ImagePanorama(mediaBaseUrl + targetPanorama.image_path)
+                        viewer.add(target_sphere)
+                        viewer.setPanorama(target_sphere);
+                    });
+
+                    addpanorama.add(teleportationPoint);
+                });
             });
 
             li.appendChild(a);
             navLinks.appendChild(li);
         });
     });
+
