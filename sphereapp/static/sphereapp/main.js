@@ -135,6 +135,22 @@ fetch('/api/photospheres/')
 
                     addpanorama.add(teleportationPoint);
                 });
+
+                // Создание точек информации
+                photoSphere.information_points.forEach(point => {
+                const InformationPoint = new PANOLENS.Infospot(350, 'static/sphereapp/images/info4.png');
+                InformationPoint.position.set(point.x, point.y, point.z);
+
+                    InformationPoint.addEventListener('click', () => {
+                        Swal.fire({
+                            title: point.title,
+                            html: point.description,
+                            icon: 'info',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                    addpanorama.add(InformationPoint);
+                });
             });
 
             li.appendChild(a);
