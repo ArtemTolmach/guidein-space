@@ -16,6 +16,229 @@ body {
 .main-container .image-container {
     flex: 1;
     height: 100%;
+    position: relative;
+}
+
+.window_infopoint, .window_movepoint {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    color: #fff;
+    border-radius: 10px;
+    padding: 30px 40px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.close_menu_form {
+    display: block;
+    width: 25px;
+    height: 25px;
+    --weight: 1px;
+    --aa: 1px;
+    --color: white;
+    border-radius: 2px;
+    background:
+        linear-gradient(45deg, transparent calc(50% - var(--weight) - var(--aa)), var(--color) calc(50% - var(--weight)), var(--color) calc(50% + var(--weight)), transparent calc(50% + var(--weight) + var(--aa))),
+        linear-gradient(-45deg, transparent calc(50% - var(--weight) - var(--aa)), var(--color) calc(50% - var(--weight)), var(--color) calc(50% + var(--weight)), transparent calc(50% + var(--weight) + var(--aa)));
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+}
+
+.window_infopoint h1, .window_movepoint h1{
+    font-size: 36px;
+    text-align: center;
+    color: #fff;
+}
+
+.window_infopoint .input-box{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.window_infopoint .createinfobtn, .window_movepoint .createmovebtn {
+    width:100%;
+    height: 45px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, .2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #fff;
+    padding-left: 20px;
+    position:relative;
+    z-index:100;
+}
+
+.input-box input::placeholder {
+    color: #fff;
+}
+
+.area-box > textarea {
+    width: 100%;
+    height: 230px;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, .2);
+    border-radius: 15px;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 35px;
+    max-width: 100%;
+}
+
+.area-box > textarea::placeholder{
+    color: #fff;
+}
+
+.area-box{
+    resize: vertical;
+}
+
+.dropdown{
+    min-width:15em;
+    position:relative;
+    margin:2em;
+    margin-bottom:40px;
+}
+
+.dropdown *{
+    box-sizing:border-box;
+}
+
+.select {
+    background: #2a2f3b;
+    color: #fff;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    border: 2px #a2f3b solid;
+    border-radius: 0.5em;
+    padding: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select-clicked {
+    box-shadow:0 0 0.8em 26489a;
+}
+
+.select:hover{
+    background: #323741;
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #fff;
+    transition: 0.3s;
+}
+
+.caret-rotate{
+    transform: rotate(180deg);
+}
+
+.menu{
+    list-style: none;
+    padding: 0.2em 0.5em;
+    background: #323741;
+    border: 1px #363a43 solid;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    border-radius: 0.5em;
+    color: #9fa5b5;
+    position: absolute;
+    top: 3em;
+    left: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    display: none;
+    transition: 0.2s;
+    z-index: 1;
+}
+
+.menu li {
+    padding: 0.7em 0.5em;
+    margin: 0.3em 0;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+
+li.invisible {
+    display: none;
+}
+
+.menu li:hover{
+    background: #2a2d35;
+}
+
+.menu-open{
+    display:block;
+    opacity: 1;
+}
+
+#addPointModeBtn1, #addPointModeBtn2{
+    font-size: 13px;
+    font-family: monospace;
+    color: #fff;
+    background: linear-gradient(to left, #8E2DE2, #4A00E0);
+    text-decoration: none;
+    padding: 1px 11px;
+    border-radius: 10px;
+    background-size: 200%;
+    transition: .5s;
+    position: absolute;
+    width: 260px;
+}
+
+#addPointModeBtn1:hover, #addPointModeBtn2:hover{
+    background-position: right;
+}
+
+#addPointModeBtn1.hidden, #addPointModeBtn2.hidden {
+    display: none;
+}
+
+#addPointModeBtn1{
+    bottom: 10px;
+    right: 100px;
+}
+
+#addPointModeBtn2{
+    bottom: 10px;
+    right: 370px;
 }
 
 .navbar {

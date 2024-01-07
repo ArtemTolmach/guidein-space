@@ -2,6 +2,7 @@ from django.db import models
 
 
 class PhotoSphere(models.Model):
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     image_path = models.ImageField(upload_to='images/')
 
@@ -10,7 +11,7 @@ class PhotoSphere(models.Model):
 
 
 class TeleportationPoint(models.Model):
-    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=13)
+    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1)
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
@@ -19,7 +20,7 @@ class TeleportationPoint(models.Model):
 
 
 class InformationPoints(models.Model):
-    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=13)
+    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1)
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
