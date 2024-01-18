@@ -4,6 +4,7 @@ body {
     list-style: none;
     text-decoration: none;
     box-sizing: border-box;
+    overflow-y:auto;
 }
 
 .main-container {
@@ -170,7 +171,7 @@ body {
     transform: rotate(180deg);
 }
 
-.menu{
+.menu {
     list-style: none;
     padding: 0.2em 0.5em;
     background: #323741;
@@ -187,6 +188,19 @@ body {
     display: none;
     transition: 0.2s;
     z-index: 1;
+    overflow-y: auto;
+}
+
+.menu::-webkit-scrollbar {
+    width: 0.1em;
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background-color: #5d5d5d;
+}
+
+.menu::-webkit-scrollbar-track {
+    background: #323741;
 }
 
 .menu li {
@@ -207,7 +221,10 @@ li.invisible {
 .menu-open{
     display:block;
     opacity: 1;
+    height: 30vh;
 }
+
+
 
 #addPointModeBtn1, #addPointModeBtn2{
     font-size: 13px;
@@ -263,6 +280,17 @@ li.invisible {
 
 .navbar .nav-links  ul{
     display: flex;
+    overflow:hidden;
+    overflow-y:scroll;
+    height:80vh;
+}
+
+::-webkit-scrollbar {
+    width: 0.1em;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .navbar .nav-links  ul li{
@@ -270,6 +298,9 @@ li.invisible {
 }
 
 @media screen and (max-width: 900px) {
+    .main-container {
+        width:100vw;
+    }
     .navbar{
         padding: 0;
         height: 100%;
