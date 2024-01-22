@@ -50,13 +50,13 @@ menuHamburger.addEventListener('click', () => {
     navLinks.classList.toggle('mobile-menu');
 
     document.querySelector('.window_infopoint').style.display = 'none';
-    addPointModeBtn1.innerText = 'Включить добавление infopoint';
+    addPointModeBtn1.innerText = 'Включить добавление точки информации';
     submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
     submitInfoPointBtn.addEventListener('click', submitInfoPointClickHandler);
     addPointMode1 = false;
 
     document.querySelector('.window_movepoint').style.display = 'none';
-    addPointModeBtn2.innerText = 'Включить добавление movepoint';
+    addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
     submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler)
     submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
     addPointMode2 = false;
@@ -69,15 +69,15 @@ menuHamburger.addEventListener('click', () => {
 const addPointModeBtn1 = document.getElementById('addPointModeBtn1');
 addPointModeBtn1.addEventListener('click', () => {
     addPointMode1 = true;
-    addPointModeBtn1.innerText = addPointModeBtn1.innerText ==='Включить добавление infopoint' ?
-        'Включено добавление infopoint' : 'Включить добавление infopoint';
+    addPointModeBtn1.innerText = addPointModeBtn1.innerText ==='Включить добавление точки информации' ?
+        'Включено добавление точки информации' : 'Включить добавление точки информации';
 });
 
 const addPointModeBtn2 = document.getElementById('addPointModeBtn2');
 addPointModeBtn2.addEventListener('click', () => {
     addPointMode2 = true;
-    addPointModeBtn2.innerText = addPointModeBtn2.innerText === 'Включить добавление movepoint' ?
-        'Включено добавление movepoint' : 'Включить добавление movepoint';
+    addPointModeBtn2.innerText = addPointModeBtn2.innerText === 'Включить добавление точки перемещения' ?
+        'Включено добавление точки перемещения' : 'Включить добавление точки перемещения';
 });
 
 dropdowns.forEach(dropdown => {
@@ -116,13 +116,13 @@ function getActivePanoramaID() {
 
 function closeMovePointWindow() {
     document.querySelector('.window_movepoint').style.display = 'none';
-    addPointModeBtn1.innerText = 'Включить добавление infopoint';
+    addPointModeBtn1.innerText = 'Включить добавление точки информации';
     submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler)
     submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
     addPointMode2 = false;
 
     document.querySelector('.window_infopoint').style.display = 'none';
-    addPointModeBtn2.innerText = 'Включить добавление movepoint';
+    addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
     submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
     submitInfoPointBtn.addEventListener('click', submitInfoPointClickHandler);
     addPointMode1 = false;
@@ -385,9 +385,9 @@ const createMovePoint = async (outputPosition) => {
         console.log('data', data);
 
         if (data.success) {
-            console.log('Точка телепортации успешно добавлена.');
+            console.log('Точка перемещения успешно добавлена.');
         } else {
-            console.error('Не удалось создать точку телепортации.');
+            console.error('Не удалось создать точку перемещения.');
         }
     } catch (error) {
         console.error('Ошибка:', error);
@@ -404,7 +404,7 @@ viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (
         submitInfoPointClickHandler = () => {
             createInfoPoint(outputPosition);
             document.querySelector('.window_infopoint').style.display = 'none';
-            addPointModeBtn1.innerText = 'Включить добавление infopoint';
+            addPointModeBtn1.innerText = 'Включить добавление точки информации';
             addPointMode1 = false;
 
             const inputs = document.querySelectorAll('#title_input,#description_input');
@@ -439,7 +439,7 @@ viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (
             createMovePoint(outputPosition);
             document.querySelector('.window_movepoint').style.display = 'none';
             dropdownContainer.classList.remove('menu-open');
-            addPointModeBtn2.innerText = 'Включить добавление movepoint';
+            addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
             addPointMode2 = false;
 
             dropdownItems.forEach((item) => {

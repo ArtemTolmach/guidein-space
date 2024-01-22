@@ -12,9 +12,9 @@
     <div class="main-container">
         <div class="image-container">
             <div class="ButtonsAdminCreatePoints">
-                <button id="addPointModeBtn1">Включить добавление infopoint</button>
+                <button id="addPointModeBtn1">Включить добавление точки информации</button>
 
-                <button id="addPointModeBtn2">Включить добавление movepoint</button>
+                <button id="addPointModeBtn2">Включить добавление точки телепортации</button>
             </div>
             <div class="userForm">
                 <label class="label_username">ПОЛЬЗОВАТЕЛЬ: {{ user }}</label>
@@ -29,14 +29,14 @@
         <div class="window_infopoint">
                 <form id="info-form">
                     <div class="close_menu_form" onclick="closeMovePointWindow()"></div>
-                    <h1>Create Infopoint</h1>
+                    <h1>Создать точку информации</h1>
 
                     <div class="input-box">
-                        <input type="text" placeholder="Title" id="title_input">
+                        <input type="text" placeholder="Название" id="title_input">
                     </div>
 
                     <div class="area-box">
-                        <textarea placeholder="Description" id="description_input"></textarea>
+                        <textarea placeholder="Описание" id="description_input"></textarea>
                     </div>
 
                     <button type="submit" class="createinfobtn">Создать</button>
@@ -45,11 +45,11 @@
         <div class="window_movepoint">
                 <form>
                     <div class="close_menu_form" onclick="closeMovePointWindow()"></div>
-                    <h1>Create Movepoint</h1>
+                    <h1>Создать точку телепортации</h1>
 
                     <div class="dropdown">
                         <div class="select">
-                        <span class="selected">Not selected Photosphere</span>
+                        <span class="selected">Фотосфера не выбрана</span>
                         <div class="caret"></div>
                         </div>
                         <ul class="menu"></ul>
@@ -61,8 +61,8 @@
         <nav class="navbar">
             <div class="nav-links">
                 <ul>
-                    <li><a href="#" id="FirstPhotoSphereLink">First Photospeher</a></li>
-                    <li><a href="#" id="SecondPhotoSphereLink">Second Photospeher</a></li>
+                    <li><a href="#" id="FirstPhotoSphereLink">Первая фотосфера</a></li>
+                    <li><a href="#" id="SecondPhotoSphereLink">Вторая фотосфера</a></li>
                 </ul>
             </div>
             <div class="menu-hamburger" id="burger-icon">

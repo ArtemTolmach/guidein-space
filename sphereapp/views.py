@@ -117,7 +117,7 @@ def information_points_api(request):
                     )
                     return JsonResponse({'success': True})
                 else:
-                    return JsonResponse({'success': False, 'error': 'Invalid photo sphere ID'})
+                    return JsonResponse({'success': False, 'error': 'Неправильный АйДи фотосферы'})
 
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
@@ -145,7 +145,7 @@ def move_points_api(request):
                     )
                     return JsonResponse({'success': True})
             else:
-                return JsonResponse({'success': False, 'error': 'Invalid photo sphere ID'})
+                return JsonResponse({'success': False, 'error': 'Неправильный АйДи фотосферы'})
 
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})

@@ -7,31 +7,49 @@ class User(AbstractUser):
         ('superuser', 'Superuser'),
         ('regular', 'Regular User'),
     ]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='regular')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='regular', verbose_name='Роль')
 
 
 class PhotoSphere(models.Model):
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    image_path = models.ImageField(upload_to='images/')
+    title = models.CharField(max_length=255, verbose_name='Название')
+    image_path = models.ImageField(upload_to='images/', verbose_name='Путь к изображению')
+
+    class Meta:
+        verbose_name = 'Фотосфера'
+        verbose_name_plural = 'Фотосферы'
 
     def __str__(self):
         return self.title
 
 
 class TeleportationPoint(models.Model):
-    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1)
+    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1, verbose_name='Фотосфера')
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
     target_photo_sphere = models.ForeignKey(PhotoSphere, related_name='target_teleportation_points',
-                                            on_delete=models.CASCADE)
+                                            on_delete=models.CASCADE, verbose_name='Фотосфера для перемещения')
+
+    class Meta:
+        verbose_name = 'Точка перемещения'
+        verbose_name_plural = 'Точки перемещения'
+
+    def __str__(self):
+        return f'Точка перемещения #{self.id}'
 
 
 class InformationPoints(models.Model):
-    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1)
+    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1,  verbose_name='Фотосфера')
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
-    title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, verbose_name='Название')
+    description = models.CharField(max_length=255, verbose_name='Описание')
+
+    class Meta:
+        verbose_name = 'Точка информации'
+        verbose_name_plural = 'Точки информации'
+
+    def __str__(self):
+        return f'Точка информации #{self.id}'
