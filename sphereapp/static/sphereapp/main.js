@@ -1,3 +1,39 @@
+let currentUser = null;
+
+const fetchUserStatus = async () => {
+    try {
+        const response = await fetch('/api/current-user/');
+        const userData = await response.json();
+        const isSuperuser = userData.superuser;
+        checkUserStatus(isSuperuser);
+    } catch (error) {
+        console.error('Ошибка при получении информации о роли пользователя:', error);
+        checkUserStatus(false);
+    }
+};
+
+const checkUserStatus = (isSuperuser) => {
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+    if (isSuperuser && screenWidth >= 900) {
+        showButtons();
+    } else {
+        hideButtons();
+    }
+};
+
+const showButtons = () => {
+     document.getElementById('addPointModeBtn1').style.display = 'block';
+     document.getElementById('addPointModeBtn2').style.display = 'block';
+};
+
+const hideButtons = () => {
+     document.getElementById('addPointModeBtn1').style.display = 'none';
+     document.getElementById('addPointModeBtn2').style.display = 'none';
+};
+
+fetchUserStatus();
+
 let addPointMode1, addPointMode2 = false;
 let viewerClickHandler;
 let submitMovePointClickHandler, submitInfoPointClickHandler;

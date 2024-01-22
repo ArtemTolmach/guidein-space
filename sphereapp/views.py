@@ -1,8 +1,62 @@
 from django.http import JsonResponse
-from django.shortcuts import render
-from .models import PhotoSphere, TeleportationPoint, InformationPoints
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
+from django.views import View
+from django.shortcuts import render, redirect
+from .models import PhotoSphere, TeleportationPoint, InformationPoints
+from .forms import UserCreationForm
 import json
+
+
+class Register(View):
+    template_name = 'registration/register.html'
+
+    def get(self, request):
+        context = {
+            'form': UserCreationForm()
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('index')
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+
+class Logout(View):
+
+    def post(self, request):
+        logout(request)
+        return redirect('index')
+
+
+def current_user(request):
+    try:
+        user = {
+            'id': request.user.id,
+            'username': request.user.username,
+            'email': request.user.email,
+            'superuser': request.user.is_superuser,
+        }
+        return JsonResponse(user)
+    except Exception as e:
+        user = {
+            'id': None,
+            'username': None,
+            'email': None,
+            'superuser': False,
+        }
+        return JsonResponse(user)
 
 
 def index(request):
@@ -51,17 +105,19 @@ def information_points_api(request):
 
             if active_panorama_id:
                 photo_sphere = PhotoSphere.objects.get(id=active_panorama_id)
-                InformationPoints.objects.create(
-                    photo_sphere=photo_sphere,
-                    x=data['x'],
-                    y=data['y'],
-                    z=data['z'],
-                    title=data['title'],
-                    description=data['description']
-                )
-                return JsonResponse({'success': True})
-            else:
-                return JsonResponse({'success': False, 'error': 'Invalid photo sphere ID'})
+
+                if request.user.is_superuser:
+                    InformationPoints.objects.create(
+                        photo_sphere=photo_sphere,
+                        x=data['x'],
+                        y=data['y'],
+                        z=data['z'],
+                        title=data['title'],
+                        description=data['description']
+                    )
+                    return JsonResponse({'success': True})
+                else:
+                    return JsonResponse({'success': False, 'error': 'Invalid photo sphere ID'})
 
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
@@ -79,15 +135,15 @@ def move_points_api(request):
                 photo_sphere = PhotoSphere.objects.get(id=active_panorama_id)
 
                 target_photo_sphere = PhotoSphere.objects.get(title=title)
-
-                TeleportationPoint.objects.create(
-                    photo_sphere=photo_sphere,
-                    x=data['x'],
-                    y=data['y'],
-                    z=data['z'],
-                    target_photo_sphere=target_photo_sphere,
-                )
-                return JsonResponse({'success': True})
+                if request.user.is_superuser:
+                    TeleportationPoint.objects.create(
+                        photo_sphere=photo_sphere,
+                        x=data['x'],
+                        y=data['y'],
+                        z=data['z'],
+                        target_photo_sphere=target_photo_sphere,
+                    )
+                    return JsonResponse({'success': True})
             else:
                 return JsonResponse({'success': False, 'error': 'Invalid photo sphere ID'})
 

@@ -221,10 +221,8 @@ li.invisible {
 .menu-open{
     display:block;
     opacity: 1;
-    height: 30vh;
+    height: 10vh;
 }
-
-
 
 #addPointModeBtn1, #addPointModeBtn2{
     font-size: 13px;
@@ -256,6 +254,31 @@ li.invisible {
 #addPointModeBtn2{
     bottom: 10px;
     right: 370px;
+}
+
+#exitUser {
+    top: 100px;
+    position:absolute;
+    left: 1vh;
+    top: 6vh;
+}
+
+.userForm{
+    position:absolute;
+}
+
+.userFrom a{
+    top: 5vh;
+    left: 1vh;
+}
+
+.label_username{
+    left: 1vh;
+    top: 1vh;
+    font-size: 13px;
+    font-family: monospace;
+    position:absolute;
+    color: #fff;
 }
 
 .navbar {

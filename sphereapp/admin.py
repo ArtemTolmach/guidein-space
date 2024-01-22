@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import PhotoSphere, TeleportationPoint, InformationPoints
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
+User = get_user_model()
 
 class TeleportationPointInline(admin.TabularInline):
     model = TeleportationPoint
@@ -26,4 +29,9 @@ class TeleportationPointAdmin(admin.ModelAdmin):
 
 @admin.register(InformationPoints)
 class InformationPointsAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(User)
+class UserAdmin(UserAdmin):
     pass
