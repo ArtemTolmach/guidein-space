@@ -7,7 +7,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from sphereapp.forms import UserCreationForm
-from sphereapp.models import InformationPoints, PhotoSphere, TeleportationPoint
+from sphereapp.models import InformationPoints, PhotoSphere, Project, TeleportationPoint
 
 
 class Register(View):
@@ -61,46 +61,81 @@ def current_user(request):
 
 
 def index(request):
-    return render(request, 'sphereapp/index.html')
-
-
-def get_all_photospheres(_request):
-    photospheres = PhotoSphere.objects.all()
-    data = []
-
-    for photo in photospheres:
-        teleportation_points = TeleportationPoint.objects.filter(photo_sphere=photo)
-        teleportation_data = [
-            {
-                'x': point.x,
-                'y': point.y,
-                'z': point.z,
-                'target_photo_sphere': point.target_photo_sphere.title,
-            }
-            for point in teleportation_points
-        ]
-
-        information_points = InformationPoints.objects.filter(photo_sphere=photo)
-        information_data = [
-            {
-                'x': point.x,
-                'y': point.y,
-                'z': point.z,
-                'title': point.title,
-                'description': point.description,
-            }
-            for point in information_points
-        ]
-
-        data.append(
-            {
-                'id': photo.id,
-                'title': photo.title,
-                'image_path': str(photo.image_path),
-                'teleportation_points': teleportation_data,
-                'information_points': information_data,
-            },
+    projects = []
+    for project in Project.objects.all():
+        main_sphere = (
+            PhotoSphere.objects.filter(project__name=project).exclude(main_sphere=False).first()
         )
+        projects.append({'name': project.name, 'main_sphere_id': main_sphere.id})
+
+    return render(
+        request,
+        'sphereapp/index.html',
+        {
+            'projects': projects,
+        },
+    )
+
+
+def render_photosphere(request, project, image_id):
+    return render(
+        request,
+        'sphereapp/interface.html',
+        {
+            'project': project,
+            'image_id': image_id,
+        },
+    )
+
+
+def get_dropdown_items(_request, project, image_id):
+    dropdown_items = [
+        {'id': photosphere.id, 'title': photosphere.title}
+        for photosphere in PhotoSphere.objects.filter(project__name=project).exclude(id=image_id)
+    ]
+    return JsonResponse({'dropdown_items': dropdown_items}, safe=False)
+
+
+def get_photosphere(_request, project, image_id):
+    photosphere = PhotoSphere.objects.filter(project__name=project, id=image_id)[0]
+
+    teleportation_points = TeleportationPoint.objects.filter(photo_sphere=photosphere)
+    teleportation_data = [
+        {
+            'x': point.x,
+            'y': point.y,
+            'z': point.z,
+            'target_photo_sphere': point.target_photo_sphere.id,
+        }
+        for point in teleportation_points
+    ]
+
+    information_points = InformationPoints.objects.filter(photo_sphere=photosphere)
+    information_data = [
+        {
+            'x': point.x,
+            'y': point.y,
+            'z': point.z,
+            'title': point.title,
+            'description': point.description,
+        }
+        for point in information_points
+    ]
+
+    photosphere_data = {
+        'id': photosphere.id,
+        'title': photosphere.title,
+        'image_path': str(photosphere.image_path),
+        'teleportation_points': teleportation_data,
+        'information_points': information_data,
+    }
+
+    return JsonResponse(photosphere_data, safe=False)
+
+
+def get_project_photospheres(_request, project):
+    photospheres = PhotoSphere.objects.filter(project__name=project)
+    data = [{'id': photo.id, 'title': photo.title} for photo in photospheres]
 
     return JsonResponse(data, safe=False)
 

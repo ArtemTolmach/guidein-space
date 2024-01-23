@@ -109,11 +109,6 @@ dropdowns.forEach(dropdown => {
     });
 });
 
-function getActivePanoramaID() {
-    const activePanorama = viewer.panorama;
-    return activePanorama ? activePanorama.id - 23 : null;
-}
-
 function closeMovePointWindow() {
     document.querySelector('.window_movepoint').style.display = 'none';
     addPointModeBtn1.innerText = 'Включить добавление точки информации';
@@ -136,14 +131,7 @@ const viewer = new PANOLENS.Viewer({
     container: ImageContainer,
 });
 
-// Общий обработчик событий перехода
-const switchToPanorama = (panorama) => {
-    viewer.add(panorama);
-    viewer.setPanorama(panorama);
-};
-
-//Динамическое создание фотосферы
-fetch('/api/photospheres/')
+fetch('/api/photospheres/' + window.project)
     .then(response => response.json())
     .then(data => {
         const navLinks = document.querySelector('.nav-links ul');
@@ -151,75 +139,49 @@ fetch('/api/photospheres/')
         data.forEach((photoSphere, index) => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.href = '#';
+            a.href = photoSphere.id;
             a.innerText = photoSphere.title;
-
-            const mediaBaseUrl = '/media/';
-            const imagePath = photoSphere.image_path;
-            const fullImagePath = mediaBaseUrl + imagePath;
-            const addpanorama = new PANOLENS.ImagePanorama(fullImagePath);
-
-            a.addEventListener('click', () => {
-                switchToPanorama(addpanorama);
-                const navLinks = document.querySelector('.nav-links');
-                const menuHamburger = document.querySelector('.menu-hamburger');
-
-                navLinks.classList.toggle('mobile-menu')
-                menuHamburger.classList.remove('active');
-
-                const activePanorama = getActivePanoramaID();
-                console.log('Active Panorama ID:', activePanorama);
-
-                // Создание точек перемещения
-                photoSphere.teleportation_points.forEach(point => {
-                    const teleportationPoint = new PANOLENS.Infospot(350, 'static/sphereapp/images/move3.png');
-                    teleportationPoint.position.set(point.x, point.y, point.z);
-
-                    teleportationPoint.addEventListener('click', () => {
-                        // Находим целевую фотосферу по её названию
-                        const targetPanorama = data.find(pano => pano.title === point.target_photo_sphere);
-
-                        const target_sphere = new PANOLENS.ImagePanorama(mediaBaseUrl + targetPanorama.image_path)
-                        viewer.add(target_sphere)
-                        viewer.setPanorama(target_sphere);
-                    });
-
-                    addpanorama.add(teleportationPoint);
-                });
-                // Создание точек информации
-                photoSphere.information_points.forEach(point => {
-                const InformationPoint = new PANOLENS.Infospot(350, 'static/sphereapp/images/info4.png');
-                InformationPoint.position.set(point.x, point.y, point.z);
-
-                    InformationPoint.addEventListener('click', () => {
-                        Swal.fire({
-                            title: point.title,
-                            html: point.description,
-                            icon: 'info',
-                            confirmButtonText: 'OK'
-                        });
-                    });
-                    addpanorama.add(InformationPoint);
-                });
-            });
 
             li.appendChild(a);
             navLinks.appendChild(li);
         });
+    });
 
-        data.forEach((photoSphere, index) => {
-            const textdropdown = document.createElement('li');
-            textdropdown.setAttribute('data-sphere-id', photoSphere.id)
-            textdropdown.innerText = photoSphere.title;
+fetch(('/api/photosphere/' + window.project + '/' + window.imageID))
+    .then(response => response.json())
+    .then(photosphere_data => {
+        const mediaBaseUrl = '/media/';
+        const fullImagePath = mediaBaseUrl + photosphere_data.image_path;
+        const panorama = new PANOLENS.ImagePanorama(fullImagePath);
 
-            dropdownContainer.appendChild(textdropdown);
+        viewer.add(panorama);
+        viewer.setPanorama(panorama);
 
-            textdropdown.addEventListener('click', (event) => {
-                const selectedText = event.target.innerText;
-                const selectElement = document.querySelector('.window_movepoint .selected');
-                selectElement.innerText = selectedText;
-                dropdownContainer.classList.remove('menu-open');
+        // Создание точек перемещения
+        photosphere_data.teleportation_points.forEach((point, index) => {
+            const teleportationPoint = new PANOLENS.Infospot(350, '/static/sphereapp/images/move.png?' + index);
+            teleportationPoint.position.set(point.x, point.y, point.z);
+
+            teleportationPoint.addEventListener('click', () => {
+                window.location.href = point.target_photo_sphere;
             });
+
+            panorama.add(teleportationPoint);
+        });
+        // Создание точек информации
+        photosphere_data.information_points.forEach((point, index) => {
+            const InformationPoint = new PANOLENS.Infospot(350, '/static/sphereapp/images/info.png?' + index);
+            InformationPoint.position.set(point.x, point.y, point.z);
+
+            InformationPoint.addEventListener('click', () => {
+                Swal.fire({
+                    title: point.title,
+                    html: point.description,
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            });
+            panorama.add(InformationPoint);
         });
     });
 
@@ -247,7 +209,6 @@ const createInfoPoint = async (outputPosition) => {
     try {
         const description = document.getElementById('description_input').value;
         const title = document.getElementById('title_input').value;
-        const activePanorama = getActivePanoramaID();
 
         const response = await fetch(`/api/photospheres/information-points/`, {
             method: 'POST',
@@ -255,7 +216,7 @@ const createInfoPoint = async (outputPosition) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                photo_sphere: activePanorama,
+                photo_sphere: window.imageID,
                 x: outputPosition.x,
                 y: outputPosition.y,
                 z: outputPosition.z,
@@ -265,7 +226,6 @@ const createInfoPoint = async (outputPosition) => {
         });
 
         const data = await response.json();
-        console.log('data', data);
 
         if (data.success) {
             console.log('Информационная точка успешно добавлена.');
@@ -280,7 +240,6 @@ const createInfoPoint = async (outputPosition) => {
 const createMovePoint = async (outputPosition) => {
     try {
         const selectedTitle = document.querySelector('.selected').innerText;
-        const activePanorama = getActivePanoramaID();
 
         const response = await fetch(`/api/photospheres/move-points/`, {
             method: 'POST',
@@ -288,7 +247,7 @@ const createMovePoint = async (outputPosition) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                photo_sphere: activePanorama,
+                photo_sphere: window.imageID,
                 x: outputPosition.x,
                 y: outputPosition.y,
                 z: outputPosition.z,
@@ -297,7 +256,6 @@ const createMovePoint = async (outputPosition) => {
         });
 
         const data = await response.json();
-        console.log('data', data);
 
         if (data.success) {
             console.log('Точка перемещения успешно добавлена.');
@@ -308,6 +266,30 @@ const createMovePoint = async (outputPosition) => {
         console.error('Ошибка:', error);
     }
 };
+
+fetch('/api/dropdown-items/'+ window.project + '/' + window.imageID)
+    .then(response => response.json())
+    .then(data => {
+        const dropdown_items = data.dropdown_items;
+
+        dropdown_items.forEach(dropdownItem => {
+            const textDropdown = document.createElement('li');
+            textDropdown.setAttribute('data-sphere-id', dropdownItem.id);
+            textDropdown.innerText = dropdownItem.title;
+
+            dropdownContainer.appendChild(textDropdown);
+
+            textDropdown.addEventListener('click', (event) => {
+                const selectedText = event.target.innerText;
+                const selectElement = document.querySelector('.window_movepoint .selected');
+                selectElement.innerText = selectedText;
+                dropdownContainer.classList.remove('menu-open');
+            });
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching dropdown items:', error);
+    });
 
 viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (event) => {
     if (addPointMode1) {
@@ -335,20 +317,9 @@ viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (
     else if (addPointMode2) {
         const outputPosition = viewer.outputInfospotPosition(event);
         const dropdownContainer = document.querySelector('.window_movepoint .menu');
-        const dropdownItems = dropdownContainer.querySelectorAll('li');
-        const activePanoramaID = getActivePanoramaID();
         viewer.renderer.domElement.removeEventListener('click', viewerClickHandler);
 
         document.querySelector('.window_movepoint').style.display = 'block';
-
-        dropdownItems.forEach((item) => {
-            const sphereID = item.getAttribute('data-sphere-id');
-            if (sphereID && parseInt(sphereID) === activePanoramaID) {
-                item.classList.add('invisible');
-            } else {
-                item.classList.remove('invisible');
-            }
-        });
 
         submitMovePointClickHandler = () => {
             createMovePoint(outputPosition);
@@ -356,10 +327,6 @@ viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (
             dropdownContainer.classList.remove('menu-open');
             addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
             addPointMode2 = false;
-
-            dropdownItems.forEach((item) => {
-                item.classList.remove('invisible');
-            });
 
             submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler)
             viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
