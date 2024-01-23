@@ -12,9 +12,25 @@ class User(AbstractUser):
     )
 
 
+class Project(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Название')
+    bio = models.CharField(max_length=1000, blank=True, default='', verbose_name='Био')
+
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
+
+    def __str__(self):
+        return self.name
+
+
 class PhotoSphere(models.Model):
     title = models.CharField(max_length=255, verbose_name='Название')
-    image_path = models.ImageField(upload_to='images/', verbose_name='Путь к изображению')
+    image_path = models.ImageField(verbose_name='Путь к изображению')
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='photo_spheres', verbose_name='Проект',
+    )
+    main_sphere = models.BooleanField(default=False, verbose_name='Основная сфера')
 
     class Meta:
         verbose_name = 'Фотосфера'

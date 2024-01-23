@@ -6,7 +6,22 @@ from sphereapp import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('api/photospheres/', views.get_all_photospheres, name='photospheres-api'),
+    path('<str:project>/<int:image_id>', views.render_photosphere, name='render-photosphere'),
+    path(
+        'api/photosphere/<str:project>/<int:image_id>',
+        views.get_photosphere,
+        name='get-photosphere',
+    ),
+    path(
+        'api/photospheres/<str:project>',
+        views.get_project_photospheres,
+        name='get-project-photospheres',
+    ),
+    path(
+        'api/dropdown-items/<str:project>/<int:image_id>',
+        views.get_dropdown_items,
+        name='dropdown-items',
+    ),
     path(
         'api/photospheres/information-points/',
         views.information_points_api,
