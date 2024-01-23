@@ -1,9 +1,11 @@
 from django.contrib import admin
-from .models import PhotoSphere, TeleportationPoint, InformationPoints
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
+from sphereapp.models import InformationPoints, PhotoSphere, TeleportationPoint
+
 User = get_user_model()
+
 
 class TeleportationPointInline(admin.TabularInline):
     model = TeleportationPoint
@@ -19,7 +21,7 @@ class InformationPointsInline(admin.TabularInline):
 
 @admin.register(PhotoSphere)
 class PhotoSphereAdmin(admin.ModelAdmin):
-    inlines = [TeleportationPointInline, InformationPointsInline]
+    inlines = (TeleportationPointInline, InformationPointsInline)
 
 
 @admin.register(TeleportationPoint)
