@@ -1,5 +1,4 @@
-"""
-ASGI config for sphere project.
+"""ASGI config for sphere project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

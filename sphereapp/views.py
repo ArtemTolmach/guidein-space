@@ -1,11 +1,13 @@
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login, logout
-from django.views import View
-from django.shortcuts import render, redirect
-from .models import PhotoSphere, TeleportationPoint, InformationPoints
-from .forms import UserCreationForm
 import json
+
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+
+from sphereapp.forms import UserCreationForm
+from sphereapp.models import InformationPoints, PhotoSphere, TeleportationPoint
 
 
 class Register(View):
@@ -13,7 +15,7 @@ class Register(View):
 
     def get(self, request):
         context = {
-            'form': UserCreationForm()
+            'form': UserCreationForm(),
         }
         return render(request, self.template_name, context)
 
@@ -28,13 +30,12 @@ class Register(View):
             login(request, user)
             return redirect('index')
         context = {
-            'form': form
+            'form': form,
         }
         return render(request, self.template_name, context)
 
 
 class Logout(View):
-
     def post(self, request):
         logout(request)
         return redirect('index')
@@ -49,7 +50,7 @@ def current_user(request):
             'superuser': request.user.is_superuser,
         }
         return JsonResponse(user)
-    except Exception as e:
+    except AttributeError:
         user = {
             'id': None,
             'username': None,
@@ -63,35 +64,43 @@ def index(request):
     return render(request, 'sphereapp/index.html')
 
 
-def photospheres_api(request):
+def get_all_photospheres(_request):
     photospheres = PhotoSphere.objects.all()
     data = []
 
     for photo in photospheres:
         teleportation_points = TeleportationPoint.objects.filter(photo_sphere=photo)
-        teleportation_data = [{
-            'x': point.x,
-            'y': point.y,
-            'z': point.z,
-            'target_photo_sphere': point.target_photo_sphere.title
-        } for point in teleportation_points]
+        teleportation_data = [
+            {
+                'x': point.x,
+                'y': point.y,
+                'z': point.z,
+                'target_photo_sphere': point.target_photo_sphere.title,
+            }
+            for point in teleportation_points
+        ]
 
         information_points = InformationPoints.objects.filter(photo_sphere=photo)
-        information_data = [{
-            'x': point.x,
-            'y': point.y,
-            'z': point.z,
-            'title': point.title,
-            'description': point.description
-        } for point in information_points]
+        information_data = [
+            {
+                'x': point.x,
+                'y': point.y,
+                'z': point.z,
+                'title': point.title,
+                'description': point.description,
+            }
+            for point in information_points
+        ]
 
-        data.append({
-            'id': photo.id,
-            'title': photo.title,
-            'image_path': str(photo.image_path),
-            'teleportation_points': teleportation_data,
-            'information_points': information_data
-        })
+        data.append(
+            {
+                'id': photo.id,
+                'title': photo.title,
+                'image_path': str(photo.image_path),
+                'teleportation_points': teleportation_data,
+                'information_points': information_data,
+            },
+        )
 
     return JsonResponse(data, safe=False)
 
@@ -113,14 +122,15 @@ def information_points_api(request):
                         y=data['y'],
                         z=data['z'],
                         title=data['title'],
-                        description=data['description']
+                        description=data['description'],
                     )
                     return JsonResponse({'success': True})
-                else:
-                    return JsonResponse({'success': False, 'error': 'Неправильный АйДи фотосферы'})
 
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
+                return JsonResponse({'success': False, 'error': 'Неправильный ID фотосферы'})
+
+        except AttributeError as exc:
+            return JsonResponse({'success': False, 'error': str(exc)})
+    return JsonResponse({'success': False, 'error': 'Неправильный метод запроса'})
 
 
 @csrf_exempt
@@ -145,7 +155,8 @@ def move_points_api(request):
                     )
                     return JsonResponse({'success': True})
             else:
-                return JsonResponse({'success': False, 'error': 'Неправильный АйДи фотосферы'})
+                return JsonResponse({'success': False, 'error': 'Неправильный ID фотосферы'})
 
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
+        except AttributeError as exc:
+            return JsonResponse({'success': False, 'error': str(exc)})
+    return JsonResponse({'success': False, 'error': 'Неправильный метод запроса'})

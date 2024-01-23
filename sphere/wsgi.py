@@ -1,5 +1,4 @@
-"""
-WSGI config for sphere project.
+"""WSGI config for sphere project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

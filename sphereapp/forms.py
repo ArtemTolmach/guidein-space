@@ -8,11 +8,11 @@ User = get_user_model()
 
 class UserCreationForm(DjangoUserCreationForm):
     email = forms.EmailField(
-        label=_("Email"),
+        label=_('Email'),
         max_length=254,
-        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'}),
     )
 
     class Meta(DjangoUserCreationForm.Meta):
         model = User
-        fields = ("username", "email")
+        fields = ('username', 'email')

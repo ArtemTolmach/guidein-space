@@ -1,20 +1,22 @@
-from django.urls import path, include
-from .views import index, photospheres_api, information_points_api, move_points_api, Register, Logout, current_user
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import include, path
+
+from sphereapp import views
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('api/photospheres/', photospheres_api, name='photospheres_api'),
-    path('api/photospheres/information-points/', information_points_api,
-         name='information_points_api'),
-    path('api/photospheres/move-points/', move_points_api,
-         name='move_points_api'),
+    path('', views.index, name='index'),
+    path('api/photospheres/', views.get_all_photospheres, name='photospheres-api'),
+    path(
+        'api/photospheres/information-points/',
+        views.information_points_api,
+        name='information-points-api',
+    ),
+    path('api/photospheres/move-points/', views.move_points_api, name='move-points-api'),
     path('', include('django.contrib.auth.urls')),
-    path('register/', Register.as_view(), name='register'),
-    path('logout/', Logout.as_view(), name='logout'),
-    path('api/current-user/', current_user, name='current_user'),
-
+    path('register/', views.Register.as_view(), name='register'),
+    path('logout/', views.Logout.as_view(), name='logout'),
+    path('api/current-user/', views.current_user, name='current-user'),
 ]
 
 if settings.DEBUG:

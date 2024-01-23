@@ -3,7 +3,7 @@ line-length = 100
 select = ["ALL"]
 
 ignore = [
-    "ANN",
+    "ANN",    # flake8-annotations
     "D100",   # undocumented-public-module
     "D101",   # undocumented-public-class
     "D102",   # undocumented-public-method
@@ -22,3 +22,6 @@ target-version = "py312"
 
 [flake8-quotes]
 inline-quotes = "single"
+
+[format]
+quote-style = "single"
