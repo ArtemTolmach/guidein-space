@@ -35,3 +35,17 @@ class InformationPoints(models.Model):
     z = models.FloatField()
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+
+
+class StartPositionViewer(models.Model):
+    photo_sphere = models.ForeignKey(PhotoSphere, on_delete=models.CASCADE, default=1)
+    x = models.FloatField()
+    y = models.FloatField()
+    z = models.FloatField()
+
+    class Meta:
+        verbose_name = 'Стартовая позиция'
+        verbose_name_plural = 'Стартовые позиции'
+
+    def __str__(self):
+        return f'Стартовая позиция #{self.id}'

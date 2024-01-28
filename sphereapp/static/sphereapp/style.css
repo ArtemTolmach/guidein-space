@@ -20,7 +20,7 @@ body {
     position: relative;
 }
 
-.window_infopoint, .window_movepoint {
+.window_infopoint, .window_movepoint, .window_startposition {
     position:absolute;
     top: 50%;
     left: 50%;
@@ -57,7 +57,8 @@ body {
     right: 25px;
 }
 
-.window_infopoint h1, .window_movepoint h1{
+.window_infopoint h1, .window_movepoint h1, .window_startposition h1 {
+    margin-top: 15px;
     font-size: 36px;
     text-align: center;
     color: #fff;
@@ -70,7 +71,7 @@ body {
     margin: 30px 0;
 }
 
-.window_infopoint .createinfobtn, .window_movepoint .createmovebtn {
+.window_infopoint .createinfobtn, .window_movepoint .createmovebtn, .window_startposition .createstartpositionbtn{
     width:100%;
     height: 45px;
     background: #fff;
@@ -82,6 +83,7 @@ body {
     font-size: 16px;
     color: #333;
     font-weight: 600;
+    margin-top: 10px;
 }
 
 .input-box input{
@@ -224,7 +226,7 @@ li.invisible {
     height: 10vh;
 }
 
-#addPointModeBtn1, #addPointModeBtn2{
+#addPointModeBtn1, #addPointModeBtn2, #addPointModeBtn3{
     font-size: 13px;
     font-family: monospace;
     color: #fff;
@@ -238,11 +240,11 @@ li.invisible {
     width: 260px;
 }
 
-#addPointModeBtn1:hover, #addPointModeBtn2:hover{
+#addPointModeBtn1:hover, #addPointModeBtn2:hover, #addPointModeBtn3:hover{
     background-position: right;
 }
 
-#addPointModeBtn1.hidden, #addPointModeBtn2.hidden {
+#addPointModeBtn1.hidden, #addPointModeBtn2.hidden, #addPointModeBtn3.hidden {
     display: none;
 }
 
@@ -254,6 +256,11 @@ li.invisible {
 #addPointModeBtn2{
     bottom: 10px;
     right: 370px;
+}
+
+#addPointModeBtn3{
+    bottom: 10px;
+    right: 640px;
 }
 
 #exitUser {

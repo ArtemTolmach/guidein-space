@@ -25,18 +25,20 @@ const checkUserStatus = (isSuperuser) => {
 const showButtons = () => {
      document.getElementById('addPointModeBtn1').style.display = 'block';
      document.getElementById('addPointModeBtn2').style.display = 'block';
+     document.getElementById('addPointModeBtn3').style.display = 'block';
 };
 
 const hideButtons = () => {
      document.getElementById('addPointModeBtn1').style.display = 'none';
      document.getElementById('addPointModeBtn2').style.display = 'none';
+     document.getElementById('addPointModeBtn3').style.display = 'none';
 };
 
 fetchUserStatus();
 
-let addPointMode1, addPointMode2 = false;
+let addPointMode1, addPointMode2, addPointMode3 = false;
 let viewerClickHandler;
-let submitMovePointClickHandler, submitInfoPointClickHandler;
+let submitMovePointClickHandler, submitInfoPointClickHandler, submitStartPositionClickHandler;
 
 const dropdowns = document.querySelectorAll('.dropdown');
 const dropdownContainer = document.querySelector('.window_movepoint .menu');
@@ -44,6 +46,7 @@ const menuHamburger = document.querySelector(".menu-hamburger");
 const navLinks = document.querySelector(".nav-links");
 const submitMovePointBtn = document.querySelector('.createmovebtn');
 const submitInfoPointBtn = document.querySelector('.createinfobtn');
+const submitStartPositionBtn = document.querySelector('.createstartpositionbtn');
 
 menuHamburger.addEventListener('click', () => {
     menuHamburger.classList.toggle('active');
@@ -60,6 +63,12 @@ menuHamburger.addEventListener('click', () => {
     submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler)
     submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
     addPointMode2 = false;
+
+    document.querySelector('.window_startposition').style.display = 'none';
+    addPointModeBtn3.innerText = 'Включить добавление стартовой позиции';
+    submitStartPositionBtn.removeEventListener('click', submitStartPositionClickHandler)
+    submitStartPositionBtn.addEventListener('click', submitStartPositionClickHandler);
+    addPointMode3 = false;
 
     dropdownContainer.classList.remove('menu-open');
 
@@ -78,6 +87,13 @@ addPointModeBtn2.addEventListener('click', () => {
     addPointMode2 = true;
     addPointModeBtn2.innerText = addPointModeBtn2.innerText === 'Включить добавление movepoint' ?
         'Включено добавление movepoint' : 'Включить добавление movepoint';
+});
+
+const addPointModeBtn3 = document.getElementById('addPointModeBtn3');
+addPointModeBtn3.addEventListener('click', () => {
+    addPointMode3 = true;
+    addPointModeBtn3.innerText = addPointModeBtn3.innerText === 'Включить добавление стартовой позиции' ?
+        'Включено добавление стартовой позиции' : 'Включить добавление стартовой позиции';
 });
 
 dropdowns.forEach(dropdown => {
@@ -126,6 +142,12 @@ function closeMovePointWindow() {
     submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
     submitInfoPointBtn.addEventListener('click', submitInfoPointClickHandler);
     addPointMode1 = false;
+
+    document.querySelector('.window_startposition').style.display = 'none';
+    addPointModeBtn3.innerText = 'Включить добавление стартовой позиции';
+    submitStartPositionBtn.removeEventListener('click', submitStartPositionClickHandler);
+    submitStartPositionBtn.addEventListener('click', submitStartPositionClickHandler);
+    addPointMode3 = false;
 
     viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
 }
@@ -254,6 +276,19 @@ fetch('/api/photospheres/')
 
                 const activePanorama = getActivePanoramaID();
                 console.log('Active Panorama ID:', activePanorama);
+
+                const SetStartFunctionPosition = async () => {
+                    const startPositionResponse = await fetch(`/api/photospheres/start-position/?photo_sphere=${activePanorama}`);
+                    const startPositionData = await startPositionResponse.json();
+
+                    if (startPositionData.success) {
+                        const startPosition = startPositionData.start_position;
+                        viewer.tweenControlCenter(new THREE.Vector3(startPosition.x, startPosition.y, startPosition.z), 0);
+                    } else {
+                        console.error('Не удалось получить начальную позицию для текущей фотосферы.');
+                    }
+                };
+                SetStartFunctionPosition();
 
                 // Создание точек перемещения
                 photoSphere.teleportation_points.forEach(point => {
@@ -394,6 +429,40 @@ const createMovePoint = async (outputPosition) => {
     }
 };
 
+const createStartPosition = async (outputPosition) => {
+    try {
+        const activePanorama = getActivePanoramaID();
+
+        await fetch(`/api/photospheres/start-position/?photo_sphere=${activePanorama}`, {
+            method: 'DELETE',
+        });
+
+        const response = await fetch(`/api/photospheres/start-position/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                photo_sphere: activePanorama,
+                x: outputPosition.x,
+                y: outputPosition.y,
+                z: outputPosition.z,
+            }),
+        });
+
+        const data = await response.json();
+        console.log('data', data);
+
+        if (data.success) {
+            console.log('Стартовая позиция успешно добавлена. ID:', data.start_position_id);
+        } else {
+            console.error('Не удалось добавить стартовую позицию. Ошибка:', data.error);
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+};
+
 viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (event) => {
     if (addPointMode1) {
         const outputPosition = viewer.outputInfospotPosition(event);
@@ -450,5 +519,22 @@ viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (
             viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
         };
         submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
+    }
+    else if (addPointMode3){
+        const outputPosition = viewer.outputInfospotPosition(event);
+        viewer.renderer.domElement.removeEventListener('click', viewerClickHandler);
+
+        document.querySelector('.window_startposition').style.display = 'block';
+
+        submitStartPositionClickHandler = () => {
+            createStartPosition(outputPosition);
+            document.querySelector('.window_startposition').style.display = 'none';
+            addPointModeBtn3.innerText = 'Включить добавление стартовой позиции';
+            addPointMode3 = false;
+
+            submitStartPositionBtn.removeEventListener('click', submitStartPositionClickHandler);
+            viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
+        };
+        submitStartPositionBtn.addEventListener('click', submitStartPositionClickHandler);
     }
 });

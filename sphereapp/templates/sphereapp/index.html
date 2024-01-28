@@ -14,7 +14,13 @@
             <div class="ButtonsAdminCreatePoints">
                 <button id="addPointModeBtn1">Включить добавление infopoint</button>
 
+<<<<<<< HEAD
                 <button id="addPointModeBtn2">Включить добавление movepoint</button>
+=======
+                <button id="addPointModeBtn2">Включить добавление точки перемещения</button>
+
+                <button id="addPointModeBtn3">Включить добавление стартовой позиции</button>
+>>>>>>> 96149ef5 (Create functionality start position)
             </div>
             <div class="userForm">
                 <label class="label_username">ПОЛЬЗОВАТЕЛЬ: {{ user }}</label>
@@ -56,6 +62,14 @@
                     </div>
 
                     <button type="submit" class="createmovebtn">Создать</button>
+                </form>
+        </div>
+        <div class="window_startposition">
+                <form>
+                    <div class="close_menu_form" onclick="closeMovePointWindow()"></div>
+                    <h1>Создать стартовую позицию</h1>
+
+                    <button type="submit" class="createstartpositionbtn">Создать</button>
                 </form>
         </div>
         <nav class="navbar">
