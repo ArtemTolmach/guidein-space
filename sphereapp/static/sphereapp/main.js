@@ -15,6 +15,32 @@ function checkAccess() {
 
 checkAccess()
 
+document.addEventListener("DOMContentLoaded", function() {
+    const subBtns = document.querySelectorAll(".sub-btn");
+    subBtns.forEach(function(subBtn) {
+        subBtn.addEventListener("click", function() {
+            const subMenu = this.nextElementSibling;
+            toggleSubMenu(subMenu);
+        });
+    });
+
+    function toggleSubMenu(clickedSubMenu) {
+        const allSubMenus = document.querySelectorAll(".sub-menu");
+        allSubMenus.forEach(function(subMenu) {
+            if (subMenu !== clickedSubMenu) {
+                subMenu.style.display = 'none';
+            }
+        });
+
+        const style = window.getComputedStyle(clickedSubMenu);
+        if (style.display === 'none') {
+            clickedSubMenu.style.display = 'block';
+        } else {
+            clickedSubMenu.style.display = 'none';
+        }
+    }
+});
+
 let addPointMode1, addPointMode2 = false;
 let viewerClickHandler;
 let submitMovePointClickHandler, submitInfoPointClickHandler;
@@ -22,13 +48,13 @@ let submitMovePointClickHandler, submitInfoPointClickHandler;
 const dropdowns = document.querySelectorAll('.dropdown');
 const dropdownContainer = document.querySelector('.window_movepoint .menu');
 const menuHamburger = document.querySelector(".menu-hamburger");
-const navLinks = document.querySelector(".nav-links");
+const navigation = document.querySelector(".navigation");
 const submitMovePointBtn = document.querySelector('.createmovebtn');
 const submitInfoPointBtn = document.querySelector('.createinfobtn');
 
 menuHamburger.addEventListener('click', () => {
     menuHamburger.classList.toggle('active');
-    navLinks.classList.toggle('mobile-menu');
+    navigation.classList.toggle('active');
 
     document.querySelector('.window_infopoint').style.display = 'none';
     addPointModeBtn1.innerText = 'Включить добавление точки информации';
@@ -112,15 +138,33 @@ const viewer = new PANOLENS.Viewer({
     container: ImageContainer,
 });
 
+fetch('/api/locations/' + window.project)
+    .then(response => response.json())
+    .then(data => {
+        const navLinks = document.querySelector('#sub-menu-locations');
+
+        data.forEach((location) => {
+            const li = document.createElement('li');
+            li.classList.add('sub-item');
+            const a = document.createElement('a');
+            a.href = '/' + window.project + '/' + location.id + '/' + location.main_sphere + '/';
+            a.innerText = location.name;
+
+            li.appendChild(a);
+            navLinks.appendChild(li);
+        });
+    });
+
 fetch('/api/photospheres/' + window.locationID)
     .then(response => response.json())
     .then(data => {
-        const navLinks = document.querySelector('.nav-links ul');
+        const navLinks = document.querySelector('#sub-menu-photospheres');
 
-        data.forEach((photoSphere, index) => {
+        data.forEach((photoSphere) => {
             const li = document.createElement('li');
+            li.classList.add('sub-item');
             const a = document.createElement('a');
-            a.href = photoSphere.id;
+            a.href = '/' + window.project + '/' + window.locationID + '/' + photoSphere.id + '/';
             a.innerText = photoSphere.name;
 
             li.appendChild(a);
