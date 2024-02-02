@@ -5,33 +5,36 @@ from django.urls import include, path
 from sphereapp import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('<str:project>/<int:image_id>', views.render_photosphere, name='render-photosphere'),
+    path('', views.IndexView.as_view(), name='index'),
     path(
-        'api/photosphere/<str:project>/<int:image_id>',
-        views.get_photosphere,
+        '<str:project>/<int:image_id>',
+        views.RenderPhotosphereView.as_view(),
+        name='render-photosphere',
+    ),
+    path(
+        'api/photosphere/<int:pk>',
+        views.GetPhotosphereView.as_view(),
         name='get-photosphere',
     ),
     path(
         'api/photospheres/<str:project>',
-        views.get_project_photospheres,
+        views.GetProjectPhotospheresView.as_view(),
         name='get-project-photospheres',
     ),
     path(
-        'api/dropdown-items/<str:project>/<int:image_id>',
-        views.get_dropdown_items,
-        name='dropdown-items',
-    ),
-    path(
         'api/photospheres/information-points/',
-        views.information_points_api,
+        views.CreateInformationPointView.as_view(),
         name='information-points-api',
     ),
-    path('api/photospheres/move-points/', views.move_points_api, name='move-points-api'),
+    path(
+        'api/photospheres/move-points/',
+        views.CreateMovePointView.as_view(),
+        name='move-points-api',
+    ),
     path('', include('django.contrib.auth.urls')),
-    path('register/', views.Register.as_view(), name='register'),
-    path('logout/', views.Logout.as_view(), name='logout'),
-    path('api/current-user/', views.current_user, name='current-user'),
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('api/current-user/', views.CurrentUserView.as_view(), name='current-user'),
 ]
 
 if settings.DEBUG:

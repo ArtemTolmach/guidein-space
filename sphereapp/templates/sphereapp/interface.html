@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="{% static 'sphereapp/style.css' %}">
     <link rel="icon" href="{% static 'sphereapp/images/favicon.ico' %}" type="image/x-icon">
     <script>
-      window.imageID = '{{ image_id }}';
       window.project = '{{ project }}';
+      window.imageID = '{{ image_id }}';
+      window.isSuperuser = {{ is_superuser }};
     </script>
 </head>
 <body>
