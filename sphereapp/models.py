@@ -42,7 +42,7 @@ class PhotoSphere(models.Model):
 
 class TeleportationPoint(models.Model):
     photo_sphere = models.ForeignKey(
-        PhotoSphere, on_delete=models.CASCADE, verbose_name='Фотосфера',
+        PhotoSphere, on_delete=models.CASCADE, related_name='move_points', verbose_name='Фотосфера',
     )
     x = models.FloatField()
     y = models.FloatField()
@@ -60,7 +60,7 @@ class TeleportationPoint(models.Model):
 
 class InformationPoints(models.Model):
     photo_sphere = models.ForeignKey(
-        PhotoSphere, on_delete=models.CASCADE, verbose_name='Фотосфера',
+        PhotoSphere, on_delete=models.CASCADE, related_name='info_points', verbose_name='Фотосфера',
     )
     x = models.FloatField()
     y = models.FloatField()

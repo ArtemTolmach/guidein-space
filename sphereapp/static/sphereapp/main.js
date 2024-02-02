@@ -1,38 +1,19 @@
 let currentUser = null;
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-const fetchUserStatus = async () => {
-    try {
-        const response = await fetch('/api/current-user/');
-        const userData = await response.json();
-        const isSuperuser = userData.superuser;
-        checkUserStatus(isSuperuser);
-    } catch (error) {
-        console.error('Ошибка при получении информации о роли пользователя:', error);
-        checkUserStatus(false);
-    }
-};
-
-const checkUserStatus = (isSuperuser) => {
+function checkAccess() {
     const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-    if (isSuperuser && screenWidth >= 900) {
-        showButtons();
+    if (window.isSuperuser && screenWidth >= 900) {
+        document.getElementById('addPointModeBtn1').style.display = 'block';
+        document.getElementById('addPointModeBtn2').style.display = 'block';
     } else {
-        hideButtons();
+        document.getElementById('addPointModeBtn1').style.display = 'none';
+        document.getElementById('addPointModeBtn2').style.display = 'none';
     }
-};
+}
 
-const showButtons = () => {
-     document.getElementById('addPointModeBtn1').style.display = 'block';
-     document.getElementById('addPointModeBtn2').style.display = 'block';
-};
-
-const hideButtons = () => {
-     document.getElementById('addPointModeBtn1').style.display = 'none';
-     document.getElementById('addPointModeBtn2').style.display = 'none';
-};
-
-fetchUserStatus();
+checkAccess()
 
 let addPointMode1, addPointMode2 = false;
 let viewerClickHandler;
@@ -147,18 +128,16 @@ fetch('/api/photospheres/' + window.project)
         });
     });
 
-fetch(('/api/photosphere/' + window.project + '/' + window.imageID))
+fetch(('/api/photosphere/' + window.imageID))
     .then(response => response.json())
     .then(photosphere_data => {
-        const mediaBaseUrl = '/media/';
-        const fullImagePath = mediaBaseUrl + photosphere_data.image_path;
-        const panorama = new PANOLENS.ImagePanorama(fullImagePath);
+        const panorama = new PANOLENS.ImagePanorama(photosphere_data.image_path);
 
         viewer.add(panorama);
         viewer.setPanorama(panorama);
 
         // Создание точек перемещения
-        photosphere_data.teleportation_points.forEach((point, index) => {
+        photosphere_data.move_points.forEach((point, index) => {
             const teleportationPoint = new PANOLENS.Infospot(350, '/static/sphereapp/images/move.png?' + index);
             teleportationPoint.position.set(point.x, point.y, point.z);
 
@@ -169,7 +148,7 @@ fetch(('/api/photosphere/' + window.project + '/' + window.imageID))
             panorama.add(teleportationPoint);
         });
         // Создание точек информации
-        photosphere_data.information_points.forEach((point, index) => {
+        photosphere_data.info_points.forEach((point, index) => {
             const InformationPoint = new PANOLENS.Infospot(350, '/static/sphereapp/images/info.png?' + index);
             InformationPoint.position.set(point.x, point.y, point.z);
 
@@ -206,86 +185,67 @@ PANOLENS.Viewer.prototype.outputInfospotPosition = function (event) {
 };
 
 const createInfoPoint = async (outputPosition) => {
-    try {
-        const description = document.getElementById('description_input').value;
-        const title = document.getElementById('title_input').value;
+    const description = document.getElementById('description_input').value;
+    const title = document.getElementById('title_input').value;
 
-        const response = await fetch(`/api/photospheres/information-points/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                photo_sphere: window.imageID,
-                x: outputPosition.x,
-                y: outputPosition.y,
-                z: outputPosition.z,
-                title: title,
-                description: description,
-            }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            console.log('Информационная точка успешно добавлена.');
-        } else {
-            console.error('Не удалось создать информационную точку.');
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
+    await fetch(`/api/photospheres/information-points/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+            photo_sphere: window.imageID,
+            x: outputPosition.x,
+            y: outputPosition.y,
+            z: outputPosition.z,
+            title: title,
+            description: description,
+        }),
+    });
 };
 
 const createMovePoint = async (outputPosition) => {
-    try {
-        const selectedTitle = document.querySelector('.selected').innerText;
+   const targetSphereId = document.querySelector('.selected').getAttribute('data-sphere-id');
 
-        const response = await fetch(`/api/photospheres/move-points/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                photo_sphere: window.imageID,
-                x: outputPosition.x,
-                y: outputPosition.y,
-                z: outputPosition.z,
-                title: selectedTitle,
-            }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            console.log('Точка перемещения успешно добавлена.');
-        } else {
-            console.error('Не удалось создать точку перемещения.');
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
+    await fetch(`/api/photospheres/move-points/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+            photo_sphere: window.imageID,
+            x: outputPosition.x,
+            y: outputPosition.y,
+            z: outputPosition.z,
+            target_photo_sphere: targetSphereId,
+        }),
+    });
 };
 
-fetch('/api/dropdown-items/'+ window.project + '/' + window.imageID)
+fetch('/api/photospheres/'+ window.project)
     .then(response => response.json())
     .then(data => {
-        const dropdown_items = data.dropdown_items;
+        for (let dropdownItem of data) {
+            if (dropdownItem.id === parseInt(window.imageID)) {
+                continue;
+            }
+            const dropdownText = document.createElement('li');
+            dropdownText.setAttribute('data-sphere-id', dropdownItem.id);
+            dropdownText.innerText = dropdownItem.title;
 
-        dropdown_items.forEach(dropdownItem => {
-            const textDropdown = document.createElement('li');
-            textDropdown.setAttribute('data-sphere-id', dropdownItem.id);
-            textDropdown.innerText = dropdownItem.title;
+            dropdownContainer.appendChild(dropdownText);
 
-            dropdownContainer.appendChild(textDropdown);
-
-            textDropdown.addEventListener('click', (event) => {
+            dropdownText.addEventListener('click', (event) => {
                 const selectedText = event.target.innerText;
+                const selectedSphereId = event.target.getAttribute('data-sphere-id');
                 const selectElement = document.querySelector('.window_movepoint .selected');
+                selectElement.setAttribute('data-sphere-id', selectedSphereId);
                 selectElement.innerText = selectedText;
                 dropdownContainer.classList.remove('menu-open');
             });
-        });
+        }
     })
     .catch(error => {
         console.error('Error fetching dropdown items:', error);
@@ -305,9 +265,9 @@ viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (
             addPointMode1 = false;
 
             const inputs = document.querySelectorAll('#title_input,#description_input');
-            inputs.forEach(input => {
+            for (let input of inputs) {
                 input.value = '';
-            });
+            }
 
             submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
             viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
