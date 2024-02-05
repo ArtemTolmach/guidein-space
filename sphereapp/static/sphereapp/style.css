@@ -270,7 +270,7 @@ header .menu-hamburger{
 }
 
 .select {
-    background: #2a2f3b;
+    background: #23252B;
     color: #fff;
     display:flex;
     justify-content: space-between;
@@ -287,7 +287,7 @@ header .menu-hamburger{
 }
 
 .select:hover{
-    background: #323741;
+    background: #23252B;
 }
 
 .caret {
@@ -306,8 +306,8 @@ header .menu-hamburger{
 .menu {
     list-style: none;
     padding: 0.2em 0.5em;
-    background: #323741;
-    border: 1px #363a43 solid;
+    background: #23252B;
+    border: 1px #23252B solid;
     box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
     border-radius: 0.5em;
     color: #9fa5b5;
@@ -347,7 +347,7 @@ li.invisible {
 }
 
 .menu li:hover{
-    background: #2a2d35;
+    background: #23252B;
 }
 
 .menu-open{
@@ -360,7 +360,7 @@ li.invisible {
     font-size: 13px;
     font-family: monospace;
     color: #fff;
-    background: linear-gradient(to left, #8E2DE2, #4A00E0);
+    background:#23252B;
     text-decoration: none;
     padding: 1px 11px;
     border-radius: 10px;
