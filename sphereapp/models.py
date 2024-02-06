@@ -18,6 +18,14 @@ class User(AbstractUser):
 class Project(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
     bio = models.CharField(max_length=1000, blank=True, default='', verbose_name='Био')
+    main_sphere = models.ForeignKey(
+        'PhotoSphere',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='project_main_sphere',
+        verbose_name='Основная фотосфера',
+    )
 
     class Meta:
         verbose_name = 'Проект'
@@ -36,7 +44,6 @@ class PhotoSphere(models.Model):
         related_name='photo_spheres',
         verbose_name='Проект',
     )
-    main_sphere = models.BooleanField(default=False, verbose_name='Основная фотосфера')
 
     class Meta:
         verbose_name = 'Фотосфера'
