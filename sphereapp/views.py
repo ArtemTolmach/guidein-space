@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, login, logout
-from django.db.models import F
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import FormView, TemplateView
@@ -43,9 +42,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        projects = models.Project.objects.filter(
-            photo_spheres__main_sphere=True,
-        ).annotate(main_sphere_id=F('photo_spheres__id'))
+        projects = models.Project.objects.all().values('name', 'main_sphere__id')
 
         context.update({
             'projects': projects,

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from sphereapp import models
+from sphereapp import forms, models
 
 User = get_user_model()
 
@@ -27,6 +27,7 @@ class InformationPointInline(admin.TabularInline):
 
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
+    form = forms.ProjectForm
     inlines = (PhotoSphereInline,)
 
 
