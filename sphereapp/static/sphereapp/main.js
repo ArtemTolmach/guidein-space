@@ -121,7 +121,7 @@ fetch('/api/photospheres/' + window.project)
             const li = document.createElement('li');
             const a = document.createElement('a');
             a.href = photoSphere.id;
-            a.innerText = photoSphere.title;
+            a.innerText = photoSphere.name;
 
             li.appendChild(a);
             navLinks.appendChild(li);
@@ -138,14 +138,14 @@ fetch(('/api/photosphere/' + window.imageID))
 
         // Создание точек перемещения
         photosphere_data.move_points.forEach((point, index) => {
-            const teleportationPoint = new PANOLENS.Infospot(350, '/static/sphereapp/images/move.png?' + index);
-            teleportationPoint.position.set(point.x, point.y, point.z);
+            const movePoint = new PANOLENS.Infospot(350, '/static/sphereapp/images/move.png?' + index);
+            movePoint.position.set(point.x, point.y, point.z);
 
-            teleportationPoint.addEventListener('click', () => {
+            movePoint.addEventListener('click', () => {
                 window.location.href = point.target_photo_sphere;
             });
 
-            panorama.add(teleportationPoint);
+            panorama.add(movePoint);
         });
         // Создание точек информации
         photosphere_data.info_points.forEach((point, index) => {
@@ -233,7 +233,7 @@ fetch('/api/photospheres/'+ window.project)
             }
             const dropdownText = document.createElement('li');
             dropdownText.setAttribute('data-sphere-id', dropdownItem.id);
-            dropdownText.innerText = dropdownItem.title;
+            dropdownText.innerText = dropdownItem.name;
 
             dropdownContainer.appendChild(dropdownText);
 

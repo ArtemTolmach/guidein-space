@@ -2,46 +2,46 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from sphereapp.models import InformationPoints, PhotoSphere, Project, TeleportationPoint
+from sphereapp import models
 
 User = get_user_model()
 
 
 class PhotoSphereInline(admin.TabularInline):
-    model = PhotoSphere
+    model = models.PhotoSphere
     extra = 1
     fk_name = 'project'
 
 
-class TeleportationPointInline(admin.TabularInline):
-    model = TeleportationPoint
+class MovePointInline(admin.TabularInline):
+    model = models.MovePoint
     extra = 1
     fk_name = 'photo_sphere'
 
 
-class InformationPointsInline(admin.TabularInline):
-    model = InformationPoints
+class InformationPointInline(admin.TabularInline):
+    model = models.InformationPoint
     extra = 1
     fk_name = 'photo_sphere'
 
 
-@admin.register(Project)
+@admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     inlines = (PhotoSphereInline,)
 
 
-@admin.register(PhotoSphere)
+@admin.register(models.PhotoSphere)
 class PhotoSphereAdmin(admin.ModelAdmin):
-    inlines = (TeleportationPointInline, InformationPointsInline)
+    inlines = (MovePointInline, InformationPointInline)
 
 
-@admin.register(TeleportationPoint)
-class TeleportationPointAdmin(admin.ModelAdmin):
+@admin.register(models.MovePoint)
+class MovePointAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(InformationPoints)
-class InformationPointsAdmin(admin.ModelAdmin):
+@admin.register(models.InformationPoint)
+class InformationPointAdmin(admin.ModelAdmin):
     pass
 
 

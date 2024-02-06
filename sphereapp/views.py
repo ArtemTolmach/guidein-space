@@ -83,11 +83,11 @@ class GetProjectPhotospheresView(generics.ListAPIView):
 
 class CreateInformationPointView(generics.CreateAPIView):
     permission_classes = (permissions.IsAdminUser,)
-    queryset = models.InformationPoints.objects.all()
+    queryset = models.InformationPoint.objects.all()
     serializer_class = serializers.InformationPointSerializer
 
 
 class CreateMovePointView(generics.CreateAPIView):
     permission_classes = (permissions.IsAdminUser,)
-    queryset = models.TeleportationPoint.objects.all()
+    queryset = models.MovePoint.objects.all()
     serializer_class = serializers.MovePointSerializer

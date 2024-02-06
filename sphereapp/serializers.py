@@ -1,17 +1,17 @@
 from rest_framework import serializers
 
-from sphereapp.models import InformationPoints, PhotoSphere, TeleportationPoint
+from sphereapp import models
 
 
 class InformationPointSerializer(serializers.ModelSerializer):
     class Meta:
-        model = InformationPoints
+        model = models.InformationPoint
         fields = serializers.ALL_FIELDS
 
 
 class MovePointSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TeleportationPoint
+        model = models.MovePoint
         fields = serializers.ALL_FIELDS
 
 
@@ -20,11 +20,11 @@ class PhotoSphereSerializer(serializers.ModelSerializer):
     info_points = InformationPointSerializer(many=True)
 
     class Meta:
-        model = PhotoSphere
+        model = models.PhotoSphere
         fields = ('image_path', 'info_points', 'move_points')
 
 
 class ProjectPhotoSphereSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PhotoSphere
-        fields = ('title', 'id')
+        model = models.PhotoSphere
+        fields = ('name', 'id')
