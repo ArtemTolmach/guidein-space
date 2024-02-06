@@ -106,6 +106,16 @@ function closeMovePointWindow() {
     viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
 }
 
+const progressBarElement = document.getElementById('progress-bar');
+
+function renderProgressBar(event) {
+    let progress = event.progress.loaded / event.progress.total * 100;
+    progressBarElement.style.width = progress + '%';
+    if(progress === 100) {
+        progressBarElement.classList.add('finish');
+    }
+}
+
 const ImageContainer = document.querySelector('.image-container');
 
 const viewer = new PANOLENS.Viewer({
@@ -133,6 +143,7 @@ fetch(('/api/photosphere/' + window.imageID))
     .then(photosphere_data => {
         const panorama = new PANOLENS.ImagePanorama(photosphere_data.image_path);
 
+        panorama.addEventListener('progress', renderProgressBar);
         viewer.add(panorama);
         viewer.setPanorama(panorama);
 

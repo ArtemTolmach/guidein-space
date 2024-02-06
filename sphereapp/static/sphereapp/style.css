@@ -490,3 +490,16 @@ li.invisible {
         transform: rotate(45deg) translate(0, 50%);
     }
 }
+
+#progress-bar {
+    width: 0;
+    height: 5px;
+    position: fixed;
+    top: 0;
+    background: #0064de;
+    transition: opacity 0.5s ease;
+}
+
+#progress-bar.finish {
+    opacity: 0;
+}
