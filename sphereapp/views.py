@@ -28,7 +28,7 @@ class LogoutView(View):
 
 class IndexView(ListView):
     template_name = 'sphereapp/index.html'
-    queryset = models.Project.objects.values('name', 'main_location__id').annotate(
+    queryset = models.Project.objects.values('name', 'bio', 'main_location__id').annotate(
         main_sphere__id=F('main_location__main_sphere__id'),
     )
 
