@@ -1,0 +1,9 @@
+services:
+  backend:
+    image: guidein-space:latest
+    env_file:
+      - "../.env"
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    network_mode: "host"
