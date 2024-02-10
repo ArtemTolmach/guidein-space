@@ -246,3 +246,144 @@ input[type="search"]::-webkit-search-cancel-button {
     cursor: pointer;
     margin-right: 15px;
 }
+
+@media (max-width: 900px) {
+    .other-container .overview-container{
+        margin-bottom: 12px;
+    }
+
+    header .logo {
+        margin: 2vh 0 0 3vh;
+        font-size: 40px;
+    }
+
+    .search {
+        margin-top: 33vh;
+        min-height: 40px;
+        height: 2vh;
+        width: 80%;
+    }
+
+    .overview-container .caption, .about-us-container .caption {
+        font-size: 30px;
+    }
+
+    .projects-container .one-project-container {
+        margin: 20px 30px 10px 30px;
+    }
+
+    .one-project-container .img-project {
+        margin: 25px 25px 20px 25px;
+    }
+
+    .one-project-container .project-name {
+        font-size: 25px;
+        font-weight: 400;
+        margin: 0 25px 0 25px;
+    }
+
+    .one-project-container .project-bio {
+        font-size: 18px;
+        margin: 12px 25px 25px 25px;
+    }
+
+    .about-us-container .describe-gispy {
+        font-size: 18px;
+        margin: 2vh 0 0 0;
+        text-align: center;
+        line-height: 30px;
+        text-indent: 35px;
+    }
+
+    header .menu-bar {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+        backdrop-filter: blur(20px);
+        right: -100%;
+        display: none;
+        margin: 0;
+    }
+
+    header .menu-bar.active {
+        right: 0;
+        overflow: hidden;
+        display: block;
+    }
+
+
+    header .navigation {
+        top: 15%;
+        position: relative;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        list-style-type: none;
+    }
+
+    .navigation .menu-item {
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin-top: 8vh;
+    }
+
+    .menu-item a {
+        font-size: 35px;
+    }
+
+    header .menu-hamburger {
+        z-index: 10001;
+        display: flex;
+        position: absolute;
+        align-items: center;
+        justify-content: flex-end;
+        margin: 3vh 0 0 0;
+        right: 3vh;
+        width: 41px;
+        height: 29px;
+    }
+
+    header .menu-hamburger span {
+        height: 4px;
+        width: 100%;
+        transform: scale(1);
+        background-color: #fff;
+        border-radius: 4px;
+    }
+
+    header .menu-hamburger::before, .menu-hamburger::after {
+        content: '';
+        position: absolute;
+        height: 4px;
+        width: 100%;
+        background-color: #fff;
+        transition: all 0.2s ease 0s;
+        border-radius: 4px;
+    }
+
+    header .menu-hamburger::before {
+        top: 0;
+    }
+
+    header .menu-hamburger::after {
+        bottom: 0;
+    }
+
+    header .menu-hamburger.active span {
+        transform: scale(0);
+    }
+
+    header .menu-hamburger.active::before {
+        top: 50%;
+        transform: rotate(-45deg) translate(0, -50%);
+    }
+
+    header .menu-hamburger.active::after {
+        top: 42.5%;
+        transform: rotate(45deg) translate(0, 50%);
+    }
+}
