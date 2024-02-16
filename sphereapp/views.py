@@ -15,10 +15,9 @@ class RegisterView(FormView):
     form_class = UserCreationForm
 
     def form_valid(self, form):
-        form.save()
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
+        user = form.save()
         login(self.request, user)
         return redirect('index')
 
