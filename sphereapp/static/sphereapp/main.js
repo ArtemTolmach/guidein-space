@@ -1,19 +1,4 @@
-let currentUser = null;
 const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-function checkAccess() {
-    const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-    if (window.isSuperuser && screenWidth >= 900) {
-        document.getElementById('addPointModeBtn1').style.display = 'block';
-        document.getElementById('addPointModeBtn2').style.display = 'block';
-    } else {
-        document.getElementById('addPointModeBtn1').style.display = 'none';
-        document.getElementById('addPointModeBtn2').style.display = 'none';
-    }
-}
-
-checkAccess()
 
 document.addEventListener("DOMContentLoaded", function() {
     const subBtns = document.querySelectorAll(".sub-btn");
@@ -74,18 +59,21 @@ menuHamburger.addEventListener('click', () => {
 });
 
 const addPointModeBtn1 = document.getElementById('addPointModeBtn1');
-addPointModeBtn1.addEventListener('click', () => {
-    addPointMode1 = true;
-    addPointModeBtn1.innerText = addPointModeBtn1.innerText === 'Включить добавление точки информации' ?
-        'Включено добавление точки информации' : 'Включить добавление точки информации';
-});
-
 const addPointModeBtn2 = document.getElementById('addPointModeBtn2');
-addPointModeBtn2.addEventListener('click', () => {
-    addPointMode2 = true;
-    addPointModeBtn2.innerText = addPointModeBtn2.innerText === 'Включить добавление точки перемещения' ?
-        'Включено добавление точки перемещения' : 'Включить добавление точки перемещения';
-});
+
+if (addPointModeBtn1 && addPointModeBtn2) {
+    addPointModeBtn1.addEventListener('click', () => {
+        addPointMode1 = true;
+        addPointModeBtn1.innerText = addPointModeBtn1.innerText === 'Включить добавление точки информации' ?
+            'Включено добавление точки информации' : 'Включить добавление точки информации';
+    });
+
+    addPointModeBtn2.addEventListener('click', () => {
+        addPointMode2 = true;
+        addPointModeBtn2.innerText = addPointModeBtn2.innerText === 'Включить добавление точки перемещения' ?
+            'Включено добавление точки перемещения' : 'Включить добавление точки перемещения';
+    });
+}
 
 dropdowns.forEach(dropdown => {
     const select = dropdown.querySelector('.select');

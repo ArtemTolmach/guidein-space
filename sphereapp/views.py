@@ -4,8 +4,6 @@ from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import FormView, ListView, TemplateView
 from rest_framework import generics, permissions
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from sphereapp import models, serializers
 from sphereapp.forms import UserCreationForm
@@ -29,12 +27,6 @@ class LogoutView(View):
     def post(request):
         logout(request)
         return redirect('index')
-
-
-class CurrentUserView(APIView):
-    @staticmethod
-    def get(request):
-        return Response({'is_superuser': request.user.is_superuser})
 
 
 class IndexView(ListView):
@@ -96,7 +88,6 @@ class RenderPhotosphereView(TemplateView):
                 'project': kwargs.get('project'),
                 'location_id': kwargs.get('location_id'),
                 'image_id': kwargs.get('image_id'),
-                'is_superuser': str(self.request.user.is_superuser).lower(),
             },
         )
 
