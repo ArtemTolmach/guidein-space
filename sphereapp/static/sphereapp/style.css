@@ -374,10 +374,6 @@ li.invisible {
     background-position: right;
 }
 
-#addPointModeBtn1.hidden, #addPointModeBtn2.hidden {
-    display: none;
-}
-
 #addPointModeBtn1{
     bottom: 10px;
     right: 100px;

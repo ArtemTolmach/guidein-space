@@ -12,17 +12,18 @@
       window.project = '{{ project }}';
       window.locationID = '{{ location_id }}';
       window.imageID = '{{ image_id }}';
-      window.isSuperuser = {{ is_superuser }};
     </script>
 </head>
 <body>
     <div class="main-container">
         <div class="image-container">
-            <div class="ButtonsAdminCreatePoints">
-                <button id="addPointModeBtn1">Включить добавление точки информации</button>
+            {% if request.user.is_superuser %}
+                <div class="ButtonsAdminCreatePoints">
+                    <button id="addPointModeBtn1">Включить добавление точки информации</button>
 
-                <button id="addPointModeBtn2">Включить добавление точки телепортации</button>
-            </div>
+                    <button id="addPointModeBtn2">Включить добавление точки телепортации</button>
+                </div>
+            {% endif %}
         </div>
         <div class="window_infopoint">
                 <form id="info-form">

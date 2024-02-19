@@ -49,7 +49,6 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('api/current-user/', views.CurrentUserView.as_view(), name='current-user'),
 ]
 
 if settings.DEBUG:
