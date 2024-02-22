@@ -67,7 +67,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-ROOT_URLCONF = 'sphere.urls'
+ROOT_URLCONF = 'conf.urls'
 
 TEMPLATES = [
     {
@@ -85,7 +85,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sphere.wsgi.application'
+WSGI_APPLICATION = 'conf.wsgi.application'
 
 
 # Database
