@@ -50,7 +50,7 @@ menuHamburger.addEventListener('click', () => {
 const addPointModeBtn1 = document.getElementById('addPointModeBtn1');
 addPointModeBtn1.addEventListener('click', () => {
     addPointMode1 = true;
-    addPointModeBtn1.innerText = addPointModeBtn1.innerText ==='Включить добавление точки информации' ?
+    addPointModeBtn1.innerText = addPointModeBtn1.innerText === 'Включить добавление точки информации' ?
         'Включено добавление точки информации' : 'Включить добавление точки информации';
 });
 
@@ -112,7 +112,7 @@ const viewer = new PANOLENS.Viewer({
     container: ImageContainer,
 });
 
-fetch('/api/photospheres/' + window.project)
+fetch('/api/photospheres/' + window.locationID)
     .then(response => response.json())
     .then(data => {
         const navLinks = document.querySelector('.nav-links ul');
@@ -165,7 +165,7 @@ fetch(('/api/photosphere/' + window.imageID))
     });
 
 // Метод получения и вывода координат при клике
-PANOLENS.Viewer.prototype.outputInfospotPosition = function (event) {
+PANOLENS.Viewer.prototype.outputInfospotPosition = function(event) {
     var intersects, point, panoramaWorldPosition, outputPosition;
 
     intersects = this.raycaster.intersectObject(this.panorama, true);
@@ -206,7 +206,7 @@ const createInfoPoint = async (outputPosition) => {
 };
 
 const createMovePoint = async (outputPosition) => {
-   const targetSphereId = document.querySelector('.selected').getAttribute('data-sphere-id');
+    const targetSphereId = document.querySelector('.selected').getAttribute('data-sphere-id');
 
     await fetch(`/api/photospheres/move-points/`, {
         method: 'POST',
@@ -224,7 +224,7 @@ const createMovePoint = async (outputPosition) => {
     });
 };
 
-fetch('/api/photospheres/'+ window.project)
+fetch('/api/photospheres/' + window.locationID)
     .then(response => response.json())
     .then(data => {
         for (let dropdownItem of data) {
@@ -251,7 +251,7 @@ fetch('/api/photospheres/'+ window.project)
         console.error('Error fetching dropdown items:', error);
     });
 
-viewer.renderer.domElement.addEventListener('click',viewerClickHandler = async (event) => {
+viewer.renderer.domElement.addEventListener('click', viewerClickHandler = async (event) => {
     if (addPointMode1) {
         const outputPosition = viewer.outputInfospotPosition(event);
         viewer.renderer.domElement.removeEventListener('click', viewerClickHandler);

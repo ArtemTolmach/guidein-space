@@ -24,7 +24,13 @@ class PhotoSphereSerializer(serializers.ModelSerializer):
         fields = ('image_path', 'info_points', 'move_points')
 
 
-class ProjectPhotoSphereSerializer(serializers.ModelSerializer):
+class ProjectLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Location
+        fields = ('name', 'id', 'main_sphere')
+
+
+class LocationPhotoSphereSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PhotoSphere
         fields = ('name', 'id')

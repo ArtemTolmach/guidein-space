@@ -18,13 +18,13 @@ class User(AbstractUser):
 class Project(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
     bio = models.CharField(max_length=1000, blank=True, default='', verbose_name='Био')
-    main_sphere = models.ForeignKey(
-        'PhotoSphere',
+    main_location = models.ForeignKey(
+        'Location',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='project_main_sphere',
-        verbose_name='Основная фотосфера',
+        related_name='project_main_location',
+        verbose_name='Основная локация',
     )
 
     class Meta:
@@ -35,14 +35,39 @@ class Project(models.Model):
         return self.name
 
 
-class PhotoSphere(models.Model):
+class Location(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
-    image_path = models.ImageField(verbose_name='Путь к изображению')
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE,
         related_name='photo_spheres',
         verbose_name='Проект',
+    )
+    main_sphere = models.ForeignKey(
+        'PhotoSphere',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='location_main_sphere',
+        verbose_name='Основная фотосфера',
+    )
+
+    class Meta:
+        verbose_name = 'Локация'
+        verbose_name_plural = 'Локации'
+
+    def __str__(self):
+        return self.name
+
+
+class PhotoSphere(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Название')
+    image_path = models.ImageField(verbose_name='Путь к изображению')
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.CASCADE,
+        related_name='photo_spheres',
+        verbose_name='Локация',
     )
 
     class Meta:

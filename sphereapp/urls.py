@@ -7,19 +7,24 @@ from sphereapp import views
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path(
-        '<str:project>/<int:image_id>',
+        '<str:project>/<int:location_id>/<int:image_id>/',
         views.RenderPhotosphereView.as_view(),
         name='render-photosphere',
     ),
     path(
-        'api/photosphere/<int:pk>',
+        'api/photosphere/<int:pk>/',
         views.GetPhotosphereView.as_view(),
         name='get-photosphere',
     ),
     path(
-        'api/photospheres/<str:project>',
-        views.GetProjectPhotospheresView.as_view(),
-        name='get-project-photospheres',
+        'api/locations/<str:project>/',
+        views.GetProjectLocationsView.as_view(),
+        name='get-project-locations',
+    ),
+    path(
+        'api/photospheres/<int:location_id>/',
+        views.GetLocationPhotospheresView.as_view(),
+        name='get-location-photospheres',
     ),
     path(
         'api/photospheres/information-points/',

@@ -1,5 +1,5 @@
-{%  for project in projects %}
+{% for project in object_list %}
   {% if project.main_sphere__id %}
-  <a href="/{{ project.name }}/{{ project.main_sphere__id }}">{{ project.name }}</a><br>
+    <a href="/{{ project.name }}/{{ project.main_location__id }}/{{ project.main_sphere__id }}">{{ project.name }}</a><br>
   {% endif %}
 {% endfor %}

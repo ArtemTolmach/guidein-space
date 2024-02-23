@@ -27,10 +27,28 @@ class ProjectForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        queryset = self.fields['main_location'].queryset
+        if self.instance.pk:
+            queryset = models.Location.objects.filter(
+                project=self.instance,
+            )
+        else:
+            queryset = queryset.none()
+
+        self.fields['main_location'].queryset = queryset
+
+
+class LocationForm(forms.ModelForm):
+    class Meta:
+        model = models.Location
+        fields = forms.ALL_FIELDS
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         queryset = self.fields['main_sphere'].queryset
         if self.instance.pk:
             queryset = models.PhotoSphere.objects.filter(
-                project=self.instance,
+                location=self.instance,
             )
         else:
             queryset = queryset.none()

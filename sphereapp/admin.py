@@ -7,10 +7,16 @@ from sphereapp import forms, models
 User = get_user_model()
 
 
+class LocationInline(admin.TabularInline):
+    model = models.Location
+    extra = 1
+    fk_name = 'project'
+
+
 class PhotoSphereInline(admin.TabularInline):
     model = models.PhotoSphere
     extra = 1
-    fk_name = 'project'
+    fk_name = 'location'
 
 
 class MovePointInline(admin.TabularInline):
@@ -28,6 +34,12 @@ class InformationPointInline(admin.TabularInline):
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     form = forms.ProjectForm
+    inlines = (LocationInline,)
+
+
+@admin.register(models.Location)
+class LocationAdmin(admin.ModelAdmin):
+    form = forms.LocationForm
     inlines = (PhotoSphereInline,)
 
 
