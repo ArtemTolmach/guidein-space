@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import F
 from django.shortcuts import redirect
 from django.views import View
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, ListView, TemplateView
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -36,19 +37,11 @@ class CurrentUserView(APIView):
         return Response({'is_superuser': request.user.is_superuser})
 
 
-class IndexView(TemplateView):
+class IndexView(ListView):
     template_name = 'sphereapp/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        projects = models.Project.objects.all().values('name', 'main_sphere__id')
-
-        context.update({
-            'projects': projects,
-        })
-
-        return context
+    queryset = models.Project.objects.values('name', 'main_location__id').annotate(
+        main_sphere__id=F('main_location__main_sphere__id'),
+    )
 
 
 class RenderPhotosphereView(TemplateView):
@@ -58,6 +51,7 @@ class RenderPhotosphereView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'project': kwargs['project'],
+            'location_id': kwargs['location_id'],
             'image_id': kwargs['image_id'],
             'is_superuser': str(self.request.user.is_superuser).lower(),
         })
@@ -69,13 +63,22 @@ class GetPhotosphereView(generics.RetrieveAPIView):
     serializer_class = serializers.PhotoSphereSerializer
 
 
-class GetProjectPhotospheresView(generics.ListAPIView):
-    serializer_class = serializers.ProjectPhotoSphereSerializer
+class GetProjectLocationsView(generics.ListAPIView):
+    serializer_class = serializers.ProjectLocationSerializer
     lookup_field = 'project__name'
     lookup_url_kwarg = 'project'
 
     def get_queryset(self):
-        return models.PhotoSphere.objects.filter(project__name=self.kwargs['project'])
+        return models.Location.objects.filter(project__name=self.kwargs['project'])
+
+
+class GetLocationPhotospheresView(generics.ListAPIView):
+    serializer_class = serializers.LocationPhotoSphereSerializer
+    lookup_field = 'location__id'
+    lookup_url_kwarg = 'location'
+
+    def get_queryset(self):
+        return models.PhotoSphere.objects.filter(location__id=self.kwargs['location_id'])
 
 
 class CreateInformationPointView(generics.CreateAPIView):
