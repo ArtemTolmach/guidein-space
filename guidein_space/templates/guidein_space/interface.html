@@ -1,18 +1,33 @@
 {% load static %}
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gispace</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="{% static 'guidein_space/style.css' %}">
-  <link rel="icon" href="{% static 'guidein_space/images/favicon.ico' %}" type="image/x-icon">
-  <script>
-    window.project = '{{ project }}';
-    window.locationID = '{{ location_id }}';
-    window.imageID = '{{ image_id }}';
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gispace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'sphereapp/style.css' %}">
+    <link rel="icon" href="{% static 'sphereapp/images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+    <script>
+      window.project = '{{ project }}';
+      window.locationID = '{{ location_id }}';
+      window.imageID = '{{ image_id }}';
+    </script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+                "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
+                "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
+            }
+        }
+    </script>
+
+    <script src="{% static 'sphereapp/vendor/sweetalert2.all.min.js' %}"></script>
+    <script src="{% static 'sphereapp/vendor/three.min.js' %}"></script>
+    <script src="{% static 'sphereapp/vendor/panolens.min.js' %}"></script>
+    <script type="module" src="{% static 'sphereapp/main.js' %}"></script>
 </head>
 <body>
   <div class="main-container">
@@ -20,13 +35,26 @@
       {% if request.user.is_superuser %}
         <div class="ButtonsAdminCreatePoints">
           <button id="addPointModeBtn1">Включить добавление точки информации</button>
+
           <button id="addPointModeBtn2">Включить добавление точки телепортации</button>
+
+          <button id="addPolygonModeBtn3">Включить добавление полигона</button>
+
+          <button id="addVideoModeBtn4">Включить добавление Видео</button>
+
+          <button id="addImageModeBtn5">Включить добавление Изображения</button>
+
+          <button id="addPolyLineModeBtn6">Включить добавление линии</button>
+
+          <input type="file" name="videoFile" id="file">
+
+          <button id="addDataSend">Продолжить</button>
         </div>
       {% endif %}
     </div>
     <div class="window_infopoint">
       <form id="info-form">
-        <div class="close_menu_form" onclick="closeMovePointWindow()"></div>
+        <div class="close_menu_form" ></div>
         <h1>Создать точку информации</h1>
 
         <div class="input-box">
@@ -42,7 +70,7 @@
     </div>
     <div class="window_movepoint">
       <form>
-        <div class="close_menu_form" onclick="closeMovePointWindow()"></div>
+        <div class="close_menu_form"></div>
         <h1>Создать точку телепортации</h1>
 
         <div class="dropdown">
@@ -65,11 +93,13 @@
         <ul class="menu-header">
           <li class="menu-item">
             <a  class="sub-btn" href="#" id="sub-btn-projects">Локации<i class="fas fa-angle-down"></i> </a>
-            <ul class="sub-menu" id="sub-menu-locations"></ul>
+            <ul class="sub-menu" id="sub-menu-locations">
+            </ul>
           </li>
           <li class="menu-item">
             <a  class="sub-btn" href="#" id="sub-btn-photospheres">Фотосферы<i class="fas fa-angle-down"></i> </a>
-            <ul class="sub-menu" id="sub-menu-photospheres"></ul>
+            <ul class="sub-menu" id="sub-menu-photospheres">
+            </ul>
           </li>
         </ul>
         <div class="auth-container">
@@ -78,7 +108,9 @@
               <li class="menu-item"><a id="user-name" href="#">{{ user }}</a></li>
               <form class="form-entranse" method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
+                {% if user.is_authenticated %}
+                  <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
+                {% endif %}
               </form>
             {% else %}
               <li class="menu-item"><a href="{% url 'register' %}">Регистрация</a></li>
@@ -88,9 +120,4 @@
       </div>
     </header>
   </div>
-
-  <script src="{% static 'guidein_space/vendor/sweetalert2.all.min.js' %}"></script>
-  <script src="{% static 'guidein_space/vendor/three.min.js' %}"></script>
-  <script src="{% static 'guidein_space/vendor/panolens.min.js' %}"></script>
-  <script src="{% static 'guidein_space/main.js' %}"></script>
 </body>
