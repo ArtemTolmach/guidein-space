@@ -127,3 +127,27 @@ class CreateMovePointView(generics.CreateAPIView):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.MovePoint.objects.all()
     serializer_class = serializers.MovePointSerializer
+
+
+class CreatePolygonPointView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = models.PolygonPoint.objects.all()
+    serializer_class = serializers.PolygonPointSerializer
+
+
+class CreateVideoPointView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = models.VideoPoint.objects.all()
+    serializer_class = serializers.VideoPointSerializer
+
+
+class CreateImagePointView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = models.ImagePoint.objects.all()
+    serializer_class = serializers.ImagePointSerializer
+
+
+class CreatePolyLinePointView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = models.PolyLinePoint.objects.all()
+    serializer_class = serializers.PolyLinePointSerializer

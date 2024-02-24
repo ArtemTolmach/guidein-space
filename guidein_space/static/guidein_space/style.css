@@ -1,3 +1,6 @@
+@import 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.css';
+@import 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.css';
+
 body {
     margin: 0;
     padding: 0;
@@ -168,6 +171,7 @@ header .menu-hamburger{
     text-align: center;
     background-color: rgba(0, 0, 0, 0.4);
     display: none;
+    z-index:999;
 }
 
 .close_menu_form {
@@ -187,6 +191,7 @@ header .menu-hamburger{
     position: absolute;
     top: 25px;
     right: 25px;
+    z-index:998;
 }
 
 .window_infopoint h1, .window_movepoint h1{
@@ -356,7 +361,7 @@ li.invisible {
     height: 10vh;
 }
 
-#addPointModeBtn1, #addPointModeBtn2{
+#addPointModeBtn1, #addPointModeBtn2, #addPolygonModeBtn3, #addDataSend, #addVideoModeBtn4, #addImageModeBtn5, #addPolyLineModeBtn6, #file {
     font-size: 13px;
     font-family: monospace;
     color: #fff;
@@ -368,9 +373,10 @@ li.invisible {
     transition: .5s;
     position: absolute;
     width: 260px;
+    z-index:999;
 }
 
-#addPointModeBtn1:hover, #addPointModeBtn2:hover{
+#addPointModeBtn1:hover, #addPointModeBtn2:hover, #addPolygonModeBtn3:hover, #addDataSend:hover, #addVideoModeBtn4:hover, #addImageModeBtn5:hover, #addPolyLineModeBtn6:hover {
     background-position: right;
 }
 
@@ -382,6 +388,37 @@ li.invisible {
 #addPointModeBtn2{
     bottom: 10px;
     right: 370px;
+}
+
+#addPolygonModeBtn3{
+    bottom: 10px;
+    right: 670px;
+}
+
+#addVideoModeBtn4{
+    bottom: 70px;
+    right: 670px;
+}
+
+#addImageModeBtn5{
+    bottom: 70px;
+    right: 370px;
+}
+#addPolyLineModeBtn6{
+    bottom: 70px;
+    right: 100px;
+}
+
+
+#addDataSend{
+    bottom: 10px;
+    right: 870px;
+    display:none;
+}
+
+#file{
+    bottom: 10px;
+    right: 1070px;
 }
 
 @media (max-width: 900px) {
@@ -531,4 +568,10 @@ li.invisible {
         top: 42.5%;
         transform: rotate(45deg) translate(0, 50%);
     }
+
+    #addPointModeBtn1, #addPointModeBtn2{
+        display:none;
+    }
 }
+
+

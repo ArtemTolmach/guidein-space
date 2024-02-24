@@ -49,6 +49,26 @@ urlpatterns = [
         views.CreateMovePointView.as_view(),
         name='move-points-api',
     ),
+    path(
+        'api/photospheres/polygon-points/',
+        views.CreatePolygonPointView.as_view(),
+        name='polygon-points-api',
+    ),
+    path(
+        'api/photospheres/video-points/',
+        views.CreateVideoPointView.as_view(),
+        name='video-points-api',
+    ),
+    path(
+        'api/photospheres/image-points/',
+        views.CreateImagePointView.as_view(),
+        name='image-points-api',
+    ),
+    path(
+        'api/photospheres/polyline-points/',
+        views.CreatePolyLinePointView.as_view(),
+        name='polyline-points-api',
+    ),
 ]
 
 if settings.DEBUG:

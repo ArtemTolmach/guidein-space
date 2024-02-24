@@ -9,6 +9,26 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    var closeWindows = document.querySelectorAll('.close_menu_form');
+    closeWindows.forEach(function(closeWindow) {
+        closeWindow.addEventListener('click', function() {
+            closeMovePointWindow();
+        });
+    });
+    function closeMovePointWindow() {
+        document.querySelector('.window_movepoint').style.display = 'none';
+        addPointModeBtn1.innerText = 'Включить добавление точки информации';
+        addPointMode2 = false;
+        submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler);
+
+        document.querySelector('.window_infopoint').style.display = 'none';
+        addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
+        addPointMode1 = false;
+        submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
+
+        viewer.addEventListener('click', clickHandler);
+    }
+
     function toggleSubMenu(clickedSubMenu) {
         const allSubMenus = document.querySelectorAll(".sub-menu");
         allSubMenus.forEach(function(subMenu) {
@@ -26,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-let addPointMode1, addPointMode2 = false;
+let addPointMode1, addPointMode2, addPolygonMode3, addVideoMode4, addImageMode5, addPolyLineMode6 = false;
 let viewerClickHandler;
 let submitMovePointClickHandler, submitInfoPointClickHandler;
 
@@ -60,8 +80,13 @@ menuHamburger.addEventListener('click', () => {
 
 const addPointModeBtn1 = document.getElementById('addPointModeBtn1');
 const addPointModeBtn2 = document.getElementById('addPointModeBtn2');
+const addPolygonModeBtn3 = document.getElementById('addPolygonModeBtn3');
+const addVideoModeBtn4 = document.getElementById('addVideoModeBtn4');
+const addImageModeBtn5 = document.getElementById('addImageModeBtn5');
 
-if (addPointModeBtn1 && addPointModeBtn2) {
+const addPolygonSendBtn = document.getElementById('addDataSend');
+
+if (addPointModeBtn1 && addPointModeBtn2 && addPolygonModeBtn3 && addVideoModeBtn4 && addImageModeBtn5){
     addPointModeBtn1.addEventListener('click', () => {
         addPointMode1 = true;
         addPointModeBtn1.innerText = addPointModeBtn1.innerText === 'Включить добавление точки информации' ?
@@ -72,6 +97,30 @@ if (addPointModeBtn1 && addPointModeBtn2) {
         addPointMode2 = true;
         addPointModeBtn2.innerText = addPointModeBtn2.innerText === 'Включить добавление точки перемещения' ?
             'Включено добавление точки перемещения' : 'Включить добавление точки перемещения';
+    });
+
+    addPolygonModeBtn3.addEventListener('click', () => {
+        addPolygonMode3 = true;
+        addPolygonModeBtn3.innerText = addPolygonModeBtn3.innerText === 'Включить добавление точки полигона' ?
+            'Включено добавление точки полигона' : 'Включить добавление точки полигона';
+    });
+
+    addVideoModeBtn4.addEventListener('click', () => {
+        addVideoMode4 = true;
+        addVideoModeBtn4.innerText = addVideoModeBtn4.innerText === 'Включить добавление точки видео' ?
+            'Включено добавление точки видео' : 'Включить добавление точки видео';
+    });
+
+    addImageModeBtn5.addEventListener('click', () => {
+        addImageMode5 = true;
+        addImageModeBtn5.innerText = addImageModeBtn5.innerText === 'Включить добавление точки изоюражения' ?
+            'Включено добавление точки изображения' : 'Включить добавление точки изображения';
+    });
+
+    addPolyLineModeBtn6.addEventListener('click', () => {
+        addPolyLineMode6 = true;
+        addPolyLineModeBtn6.innerText = addPolyLineModeBtn6.innerText === 'Включить добавление линии' ?
+            'Включено добавление точки линии' : 'Включить добавление линии';
     });
 }
 
@@ -104,26 +153,18 @@ dropdowns.forEach(dropdown => {
     });
 });
 
-function closeMovePointWindow() {
-    document.querySelector('.window_movepoint').style.display = 'none';
-    addPointModeBtn1.innerText = 'Включить добавление точки информации';
-    submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler)
-    submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
-    addPointMode2 = false;
-
-    document.querySelector('.window_infopoint').style.display = 'none';
-    addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
-    submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
-    submitInfoPointBtn.addEventListener('click', submitInfoPointClickHandler);
-    addPointMode1 = false;
-
-    viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
-}
+import { Viewer } from '@photo-sphere-viewer/core';
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 
 const ImageContainer = document.querySelector('.image-container');
 
-const viewer = new PANOLENS.Viewer({
+const viewer = new Viewer({
     container: ImageContainer,
+    plugins: [
+        [MarkersPlugin, {
+            defaultHoverScale: true,
+        }],
+    ],
 });
 
 fetch('/api/locations/' + window.project)
@@ -142,6 +183,8 @@ fetch('/api/locations/' + window.project)
             navLinks.appendChild(li);
         });
     });
+
+const markersPlugin = viewer.getPlugin(MarkersPlugin);
 
 fetch('/api/photospheres/' + window.locationID)
     .then(response => response.json())
@@ -163,58 +206,202 @@ fetch('/api/photospheres/' + window.locationID)
 fetch(('/api/photosphere/' + window.imageID))
     .then(response => response.json())
     .then(photosphere_data => {
-        const panorama = new PANOLENS.ImagePanorama(photosphere_data.image_path);
+        const panorama = photosphere_data.image_path;
 
-        viewer.add(panorama);
-        viewer.setPanorama(panorama);
+        viewer.setPanorama(panorama).then(() => {
+            markersPlugin.clearMarkers();
+            photosphere_data.move_points.forEach(point => {
+                markersPlugin.addMarker({
+                    id: point.id.toString(),
+                    position: { pitch: point.pitch, yaw: point.yaw },
+                    image: '/static/sphereapp/images/move.png',
+                    size: { width: 102, height: 102 },
+                    anchor: 'bottom center',
+                    hoverScale: false,
+                    className: 'move-point'
+                });
+                markersPlugin.markers[point.id.toString()].element.addEventListener('click', markerClickHandler);
+                markersPlugin.markers[point.id.toString()].element.addEventListener('touchstart', markerClickHandler);
 
-        // Создание точек перемещения
-        photosphere_data.move_points.forEach((point, index) => {
-            const movePoint = new PANOLENS.Infospot(350, '/static/guidein_space/images/move.png?' + index);
-            movePoint.position.set(point.x, point.y, point.z);
+                function markerClickHandler() {
+                    window.location.href = point.target_photo_sphere;
+                    console.log("КЛИК");
+                }
+            });
+            console.log(markersPlugin)
 
-            movePoint.addEventListener('click', () => {
-                window.location.href = point.target_photo_sphere;
+            photosphere_data.info_points.forEach(point => {
+                markersPlugin.addMarker({
+                    id: point.id.toString(),
+                    position: { pitch: point.pitch, yaw: point.yaw },
+                    image: '/static/sphereapp/images/info.png',
+                    size: { width: 30, height: 30 },
+                    anchor: 'bottom center',
+                    hoverScale: false,
+                });
+                markersPlugin.markers[point.id.toString()].element.addEventListener('click', markerClickHandler);
+                markersPlugin.markers[point.id.toString()].element.addEventListener('touchstart', markerClickHandler);
+
+                function markerClickHandler() {
+                    Swal.fire({
+                        title: point.title,
+                        html: point.description,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                }
             });
 
-            panorama.add(movePoint);
-        });
-        // Создание точек информации
-        photosphere_data.info_points.forEach((point, index) => {
-            const InformationPoint = new PANOLENS.Infospot(350, '/static/guidein_space/images/info.png?' + index);
-            InformationPoint.position.set(point.x, point.y, point.z);
-
-            InformationPoint.addEventListener('click', () => {
-                Swal.fire({
-                    title: point.title,
-                    html: point.description,
-                    icon: 'info',
-                    confirmButtonText: 'OK'
+            photosphere_data.polygon_points.forEach(point => {
+                markersPlugin.addMarker({
+                    id: point.id.toString(),
+                    tooltip: false,
+                    anchor: 'bottom',
+                    hoverScale: true,
+                    polygon: point.coordinates,
+                    style: {
+                        fill: point.fill,
+                        strokeColor: point.stroke,
+                        strokeWidth: point.stroke_width,
+                    },
                 });
             });
-            panorama.add(InformationPoint);
+
+            photosphere_data.video_points.forEach(point => {
+                markersPlugin.addMarker({
+                    id: point.id.toString(),
+                    videoLayer: point.video,
+                    position: point.coordinates,
+                    style: {
+                        cursor: 'pointer',
+                    },
+                    tooltip: 'Play / Pause',
+                    chromaKey: {
+                        enabled: point.enable_chroma_key,
+                        color: '#04F405',
+                        similarity: 0.3,
+                    },
+                });
+            });
+
+            photosphere_data.image_points.forEach(point => {
+                markersPlugin.addMarker({
+                    id: point.id.toString(),
+                    imageLayer: point.image,
+                    position: point.coordinates,
+                    anchor: 'bottom center',
+                });
+            });
+
+            photosphere_data.polyline_points.forEach(point => {
+                markersPlugin.addMarker({
+                    id: point.id.toString(),
+                    polyline: point.coordinates,
+                    svgStyle: {
+                        stroke: point.stroke,
+                        strokeLinecap: point.stroke_linecap,
+                        strokeLinejoin: point.stroke_linejoin,
+                        strokeWidth: point.stroke_width,
+                    },
+                });
+            });
         });
     });
 
-// Метод получения и вывода координат при клике
-PANOLENS.Viewer.prototype.outputInfospotPosition = function(event) {
-    var intersects, point, panoramaWorldPosition, outputPosition;
+let arrayPolygon = [];
+let arrayVideo = [];
+let arrayImage = [];
+let arrayPolyLine = [];
 
-    intersects = this.raycaster.intersectObject(this.panorama, true);
+function clickHandler({ data }) {
+    var outputPosition = {
+        yaw: data.yaw,
+        pitch: data.pitch,
+    };
 
-    if (intersects.length > 0) {
-        point = intersects[0].point;
-        panoramaWorldPosition = this.panorama.getWorldPosition();
+    console.log(outputPosition)
 
-        outputPosition = new THREE.Vector3(
-            -(point.x - panoramaWorldPosition.x).toFixed(2),
-            (point.y - panoramaWorldPosition.y).toFixed(2),
-            (point.z - panoramaWorldPosition.z).toFixed(2)
-        );
-        return outputPosition;
+    if (addPointMode1) {
+        handleAddInfoPoint(outputPosition);
+    } else if (addPointMode2) {
+        handleMovePoint(outputPosition);
+    } else if (addPolygonMode3) {
+        addPolygonSendBtn.style.display = 'block';
+        addPolygonSendBtn.addEventListener('click', handlePolygonPoint)
+        let coordinateClick = [data.yaw, data.pitch];
+        arrayPolygon.push(coordinateClick);
+        console.log(arrayPolygon);
+        if (arrayPolygon.length === 1){
+            markersPlugin.addMarker({
+              id: 'svg-circle-marker',
+              position: { yaw: arrayPolygon[0][0], pitch: arrayPolygon[0][1] },
+              svgStyle: {
+                fill: 'rgba(255, 0, 0, 0.6)',
+                stroke: 'rgba(255, 0, 0, 1)',
+                strokeWidth: '2px',
+              },
+              circle: 1,
+              tooltip: 'SVG круглый маркер',
+            });
+        } else if (arrayPolygon.length === 2){
+            markersPlugin.removeMarker('svg-circle-marker');
+            markersPlugin.addMarker({
+              id: 'polyline',
+              polyline: arrayPolygon,
+              svgStyle: {
+                stroke: 'rgba(255, 0, 0, 1)',
+                strokeLinecap: 'round',
+                strokeLinejoin: 'round',
+                strokeWidth: '2px',
+              },
+            });
+        } else if (arrayPolygon.length > 2){
+            var polygon = document.getElementById('psv-marker-dynamic-polygon-marker');
+            var polyline = document.getElementById('psv-marker-polyline');
+
+            if (polygon) {
+                markersPlugin.removeMarker('dynamic-polygon-marker');
+            }
+
+            if (polyline) {
+                markersPlugin.removeMarker('polyline');
+            }
+            markersPlugin.addMarker({
+                id: 'dynamic-polygon-marker',
+                polygon: arrayPolygon,
+                tooltip: 'Динамический маркер полигона',
+                anchor: 'bottom',
+                hoverScale: true,
+                style: {
+                    fill: 'rgba(255, 0, 0, 0.6)',
+                    stroke: 'rgba(255, 0, 0, 1)',
+                    strokeWidth: 2,
+                    pointerEvents: 'none',
+                }
+            });
+        }
+    } else if (addVideoMode4) {
+        addPolygonSendBtn.style.display = 'block';
+        addPolygonSendBtn.addEventListener('click', handleVideoPoint)
+        let coordinateClick = {"yaw":data.yaw,"pitch": data.pitch};
+        arrayVideo.push(coordinateClick);
+        console.log(arrayVideo);
+    } else if (addImageMode5) {
+        addPolygonSendBtn.style.display = 'block';
+        addPolygonSendBtn.addEventListener('click', handleImagePoint)
+        let coordinateClick = {"yaw":data.yaw,"pitch": data.pitch};
+        arrayImage.push(coordinateClick);
+        console.log(arrayImage);
+    } else if (addPolyLineMode6) {
+        addPolygonSendBtn.style.display = 'block';
+        addPolygonSendBtn.addEventListener('click', handlePolyLinePoint)
+        let coordinateClick = [data.yaw, data.pitch];
+        arrayPolyLine.push(coordinateClick);
+        console.log(arrayPolyLine);
     }
-    return null;
-};
+}
+
+viewer.addEventListener('click', clickHandler);
 
 const createInfoPoint = async (outputPosition) => {
     const description = document.getElementById('description_input').value;
@@ -228,9 +415,8 @@ const createInfoPoint = async (outputPosition) => {
         },
         body: JSON.stringify({
             photo_sphere: window.imageID,
-            x: outputPosition.x,
-            y: outputPosition.y,
-            z: outputPosition.z,
+            yaw: outputPosition.yaw,
+            pitch: outputPosition.pitch,
             title: title,
             description: description,
         }),
@@ -248,15 +434,89 @@ const createMovePoint = async (outputPosition) => {
         },
         body: JSON.stringify({
             photo_sphere: window.imageID,
-            x: outputPosition.x,
-            y: outputPosition.y,
-            z: outputPosition.z,
+            yaw: outputPosition.yaw,
+            pitch: outputPosition.pitch,
             target_photo_sphere: targetSphereId,
         }),
     });
 };
 
-fetch('/api/photospheres/' + window.locationID)
+const createPolygonPoint = async (arrayPolygon) => {
+    console.log(arrayPolygon)
+
+    await fetch(`/api/photospheres/polygon-points/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+            photo_sphere: window.imageID,
+            coordinates: arrayPolygon,
+            fill: 'rgba(255, 0, 0, 0.5)',
+            stroke: 'rgba(255, 0, 0, 0.5)',
+            stroke_width: '2px'
+        }),
+    });
+};
+
+const createVideoPoint = async (arrayVideo) => {
+    const videoInput = document.getElementById('file');
+    const file = videoInput.files[0];
+
+    const formData = new FormData();
+    formData.append('photo_sphere', window.imageID);
+    formData.append('video', file);
+    formData.append('coordinates', JSON.stringify(arrayVideo));
+    formData.append('enable_chroma_key', true);
+
+        const response = await fetch(`/api/photospheres/video-points/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData,
+        });
+};
+
+const createImagePoint = async (arrayVideo) => {
+    const imageInput = document.getElementById('file');
+    const file = imageInput.files[0];
+
+    const formData = new FormData();
+    formData.append('photo_sphere', window.imageID);
+    formData.append('image', file);
+    formData.append('coordinates', JSON.stringify(arrayImage));
+
+        const response = await fetch(`/api/photospheres/image-points/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData,
+        });
+};
+
+const createPolyLinePoint = async (arrayPolyLine) => {
+
+    await fetch(`/api/photospheres/polyline-points/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+            photo_sphere: window.imageID,
+            coordinates: arrayPolyLine,
+            stroke: 'rgba(255, 0, 0, 0.5)',
+            stroke_linecap: 'round',
+            stroke_linejoin: 'round',
+            stroke_width: '2px'
+        }),
+    });
+};
+
+fetch('/api/photospheres/'+ window.locationID)
     .then(response => response.json())
     .then(data => {
         for (let dropdownItem of data) {
@@ -283,46 +543,86 @@ fetch('/api/photospheres/' + window.locationID)
         console.error('Error fetching dropdown items:', error);
     });
 
-viewer.renderer.domElement.addEventListener('click', viewerClickHandler = async (event) => {
-    if (addPointMode1) {
-        const outputPosition = viewer.outputInfospotPosition(event);
-        viewer.renderer.domElement.removeEventListener('click', viewerClickHandler);
+function handleAddInfoPoint(outputPosition) {
+    viewer.removeEventListener('click', clickHandler);
 
-        document.querySelector('.window_infopoint').style.display = 'block';
+    const windowInfo = document.querySelector('.window_infopoint');
+    windowInfo.style.display = 'block';
 
-        submitInfoPointClickHandler = () => {
-            createInfoPoint(outputPosition);
-            document.querySelector('.window_infopoint').style.display = 'none';
-            addPointModeBtn1.innerText = 'Включить добавление точки информации';
-            addPointMode1 = false;
+    submitInfoPointClickHandler = () => {
+        createInfoPoint(outputPosition);
+        windowInfo.style.display = 'none';
+        addPointModeBtn1.innerText = 'Включить добавление точки информации';
+        addPointMode1 = false;
 
-            const inputs = document.querySelectorAll('#title_input,#description_input');
-            for (let input of inputs) {
-                input.value = '';
-            }
+        const inputs = document.querySelectorAll('#title_input, #description_input');
+        inputs.forEach(input => input.value = '');
 
-            submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
-            viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
-        };
-        submitInfoPointBtn.addEventListener('click', submitInfoPointClickHandler);
+        submitInfoPointBtn.removeEventListener('click', submitInfoPointClickHandler);
+
+        viewer.addEventListener('click', clickHandler);
+    };
+    submitInfoPointBtn.addEventListener('click', submitInfoPointClickHandler);
+}
+
+function handleMovePoint(outputPosition) {
+    viewer.removeEventListener('click', clickHandler);
+
+    const windowMove = document.querySelector('.window_movepoint');
+    windowMove.style.display = 'block';
+
+    submitMovePointClickHandler = () => {
+        createMovePoint(outputPosition);
+        windowMove.style.display = 'none';
+        addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
+        addPointMode2 = false;
+
+        submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler);
+
+        viewer.addEventListener('click', clickHandler);
+    };
+    submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
+}
+
+function handlePolygonPoint() {
+    viewer.removeEventListener('click', clickHandler);
+
+    var polygon = document.getElementById('psv-marker-dynamic-polygon-marker');
+
+    if (polygon) {
+        markersPlugin.removeMarker('dynamic-polygon-marker');
     }
-    else if (addPointMode2) {
-        const outputPosition = viewer.outputInfospotPosition(event);
-        const dropdownContainer = document.querySelector('.window_movepoint .menu');
-        viewer.renderer.domElement.removeEventListener('click', viewerClickHandler);
 
-        document.querySelector('.window_movepoint').style.display = 'block';
+    createPolygonPoint(arrayPolygon);
+    addPolygonSendBtn.style.display = 'none';
+    console.log(arrayPolygon)
+    arrayPolygon = []
+    viewer.addEventListener('click', clickHandler);
+}
 
-        submitMovePointClickHandler = () => {
-            createMovePoint(outputPosition);
-            document.querySelector('.window_movepoint').style.display = 'none';
-            dropdownContainer.classList.remove('menu-open');
-            addPointModeBtn2.innerText = 'Включить добавление точки перемещения';
-            addPointMode2 = false;
+function handleVideoPoint() {
+    viewer.removeEventListener('click', clickHandler);
+    createVideoPoint(arrayVideo);
+    addPolygonSendBtn.style.display = 'none';
+    console.log(arrayVideo)
 
-            submitMovePointBtn.removeEventListener('click', submitMovePointClickHandler)
-            viewer.renderer.domElement.addEventListener('click', viewerClickHandler);
-        };
-        submitMovePointBtn.addEventListener('click', submitMovePointClickHandler);
-    }
-});
+    viewer.addEventListener('click', clickHandler);
+}
+
+function handleImagePoint() {
+    viewer.removeEventListener('click', clickHandler);
+    createImagePoint(arrayVideo);
+    addPolygonSendBtn.style.display = 'none';
+    console.log(arrayVideo)
+
+    viewer.addEventListener('click', clickHandler);
+}
+
+function handlePolyLinePoint() {
+    viewer.removeEventListener('click', clickHandler);
+    createPolyLinePoint(arrayPolyLine);
+    addPolygonSendBtn.style.display = 'none';
+    console.log(arrayPolyLine)
+
+    viewer.addEventListener('click', clickHandler);
+}

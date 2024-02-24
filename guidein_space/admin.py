@@ -31,6 +31,30 @@ class InformationPointInline(admin.TabularInline):
     fk_name = 'photo_sphere'
 
 
+class PolygonPointInline(admin.TabularInline):
+    model = models.PolygonPoint
+    extra = 1
+    fk_name = 'photo_sphere'
+
+
+class VideoPointInline(admin.TabularInline):
+    model = models.VideoPoint
+    extra = 1
+    fk_name = 'photo_sphere'
+
+
+class ImagePointInline(admin.TabularInline):
+    model = models.ImagePoint
+    extra = 1
+    fk_name = 'photo_sphere'
+
+
+class PolyLineInline(admin.TabularInline):
+    model = models.PolyLinePoint
+    extra = 1
+    fk_name = 'photo_sphere'
+
+
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     form = forms.ProjectForm
@@ -45,7 +69,14 @@ class LocationAdmin(admin.ModelAdmin):
 
 @admin.register(models.PhotoSphere)
 class PhotoSphereAdmin(admin.ModelAdmin):
-    inlines = (MovePointInline, InformationPointInline)
+    inlines = (
+        MovePointInline,
+        InformationPointInline,
+        PolygonPointInline,
+        VideoPointInline,
+        ImagePointInline,
+        PolyLineInline,
+    )
 
 
 @admin.register(models.MovePoint)
@@ -55,6 +86,26 @@ class MovePointAdmin(admin.ModelAdmin):
 
 @admin.register(models.InformationPoint)
 class InformationPointAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.PolygonPoint)
+class PolygonPointAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.VideoPoint)
+class VideoPointAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.PolyLinePoint)
+class PolyLinePointAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.ImagePoint)
+class ImagePointAdmin(admin.ModelAdmin):
     pass
 
 

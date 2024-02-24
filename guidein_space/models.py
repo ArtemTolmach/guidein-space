@@ -1,3 +1,6 @@
+import uuid
+
+from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -84,15 +87,15 @@ class PhotoSphere(models.Model):
 
 
 class MovePoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     photo_sphere = models.ForeignKey(
         PhotoSphere,
         on_delete=models.CASCADE,
         related_name='move_points',
         verbose_name='Фотосфера',
     )
-    x = models.FloatField()
-    y = models.FloatField()
-    z = models.FloatField()
+    pitch = models.FloatField(verbose_name='Долгота')
+    yaw = models.FloatField(verbose_name='Широта')
     target_photo_sphere = models.ForeignKey(
         PhotoSphere,
         related_name='target_move_points',
@@ -109,15 +112,15 @@ class MovePoint(models.Model):
 
 
 class InformationPoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     photo_sphere = models.ForeignKey(
         PhotoSphere,
         on_delete=models.CASCADE,
         related_name='info_points',
         verbose_name='Фотосфера',
     )
-    x = models.FloatField()
-    y = models.FloatField()
-    z = models.FloatField()
+    pitch = models.FloatField(verbose_name='Долгота')
+    yaw = models.FloatField(verbose_name='Широта')
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     description = models.CharField(max_length=255, verbose_name='Описание')
 
@@ -127,3 +130,86 @@ class InformationPoint(models.Model):
 
     def __str__(self):
         return f'Точка информации #{self.id}'
+
+
+class PolygonPoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    photo_sphere = models.ForeignKey(
+        PhotoSphere,
+        on_delete=models.CASCADE,
+        related_name='polygon_points',
+        verbose_name='Фотосфера',
+    )
+    coordinates = models.JSONField(verbose_name='Координаты точек полигона')
+    fill = ColorField(format='rgba', verbose_name='Цвет заливки')
+    stroke = ColorField(format='rgba', verbose_name='Цвет границы')
+    stroke_width = models.CharField(max_length=20, verbose_name='Ширина границы')
+
+    class Meta:
+        verbose_name = 'Полигон'
+        verbose_name_plural = 'Полигоны'
+
+    def __str__(self):
+        return f'Полигон #{self.id}'
+
+
+class VideoPoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    video = models.FileField(upload_to='videos/', verbose_name='Видео')
+    photo_sphere = models.ForeignKey(
+        PhotoSphere,
+        on_delete=models.CASCADE,
+        related_name='video_points',
+        verbose_name='Фотосфера',
+    )
+    coordinates = models.JSONField(verbose_name='Координаты точек видео')
+    enable_chroma_key = models.BooleanField(default=False, verbose_name='Хромакей')
+
+    class Meta:
+        verbose_name = 'Видео'
+        verbose_name_plural = 'Видео'
+
+    def __str__(self):
+        return f'Видео #{self.id}'
+
+
+class ImagePoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    image = models.ImageField(upload_to='images/', verbose_name='Изображение')
+    photo_sphere = models.ForeignKey(
+        PhotoSphere,
+        on_delete=models.CASCADE,
+        related_name='image_points',
+        verbose_name='Фотосфера',
+    )
+    coordinates = models.JSONField(verbose_name='Координаты точек изображения')
+
+    class Meta:
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
+
+    def __str__(self):
+        return f'Изображение #{self.id}'
+
+
+class PolyLinePoint(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    photo_sphere = models.ForeignKey(
+        PhotoSphere,
+        on_delete=models.CASCADE,
+        related_name='polyline_points',
+        verbose_name='Фотосфера',
+    )
+    coordinates = models.JSONField(verbose_name='Координаты точек линии')
+
+    stroke = ColorField(format='rgba', verbose_name='Цвет линии')
+    stroke_width = models.CharField(max_length=20, verbose_name='Ширина линии')
+    stroke_linecap = models.CharField(max_length=20, verbose_name='Cтиль концов линии')
+    stroke_linejoin = models.CharField(max_length=20, verbose_name='Стиль соединения углов линии')
+
+    class Meta:
+        verbose_name = 'Линия'
+        verbose_name_plural = 'Линии'
+
+    def __str__(self):
+        return f'Линия #{self.id}'
