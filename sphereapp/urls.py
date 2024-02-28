@@ -12,6 +12,16 @@ urlpatterns = [
         name='render-photosphere',
     ),
     path(
+        '<str:project>/<int:location_id>/',
+        views.RenderPhotosphereView.as_view(),
+        name='render-location-photosphere',
+    ),
+    path(
+        '<str:project>/',
+        views.RenderPhotosphereView.as_view(),
+        name='render-project-photosphere',
+    ),
+    path(
         'api/photosphere/<int:pk>/',
         views.GetPhotosphereView.as_view(),
         name='get-photosphere',
