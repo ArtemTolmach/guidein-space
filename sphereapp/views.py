@@ -47,14 +47,59 @@ class IndexView(ListView):
 class RenderPhotosphereView(TemplateView):
     template_name = 'sphereapp/interface.html'
 
+    def dispatch(self, *args, **kwargs):
+        if not models.Project.objects.filter(name=kwargs['project']).first():
+            return redirect('index')
+
+        return super().dispatch(self.request, *args, **kwargs)
+
+    def get(self, *_args, **kwargs):
+        location = models.Location.objects.filter(
+            pk=kwargs.get('location_id'),
+            project__name=kwargs.get('project'),
+        ).first()
+        photosphere = models.PhotoSphere.objects.filter(
+            pk=kwargs.get('image_id'),
+            location_id=kwargs.get('location_id'),
+        ).first()
+
+        if not location:
+            project = (
+                models.Project.objects.filter(
+                    name=kwargs['project'],
+                )
+                .annotate(
+                    main_sphere__id=F('main_location__main_sphere__id'),
+                )
+                .first()
+            )
+
+            kwargs['location_id'] = project.main_location_id
+            kwargs['image_id'] = project.main_sphere__id
+
+            return redirect('render-photosphere', **kwargs)
+
+        if not photosphere:
+            kwargs['image_id'] = location.main_sphere_id
+
+            return redirect('render-photosphere', **kwargs)
+
+        context = self.get_context_data(**kwargs)
+
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'project': kwargs['project'],
-            'location_id': kwargs['location_id'],
-            'image_id': kwargs['image_id'],
-            'is_superuser': str(self.request.user.is_superuser).lower(),
-        })
+
+        context.update(
+            {
+                'project': kwargs.get('project'),
+                'location_id': kwargs.get('location_id'),
+                'image_id': kwargs.get('image_id'),
+                'is_superuser': str(self.request.user.is_superuser).lower(),
+            },
+        )
+
         return context
 
 
