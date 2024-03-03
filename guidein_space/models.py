@@ -121,8 +121,8 @@ class InformationPoint(models.Model):
     )
     pitch = models.FloatField(verbose_name='Долгота')
     yaw = models.FloatField(verbose_name='Широта')
-    title = models.CharField(max_length=255, verbose_name='Заголовок')
-    description = models.CharField(max_length=255, verbose_name='Описание')
+    title = models.CharField(max_length=255, verbose_name='Заголовок', blank=True)
+    description = models.CharField(max_length=255, verbose_name='Описание', blank=True)
 
     class Meta:
         verbose_name = 'Точка информации'
@@ -140,10 +140,17 @@ class PolygonPoint(models.Model):
         related_name='polygon_points',
         verbose_name='Фотосфера',
     )
-    coordinates = models.JSONField(verbose_name='Координаты точек полигона')
+    coordinates = models.JSONField(
+        blank=True,
+        default=[],
+        verbose_name='Координаты точек полигона',
+    )
+    opacity = models.CharField(max_length=20, default='1', verbose_name='Прозрачность полигона')
     fill = ColorField(format='rgba', verbose_name='Цвет заливки')
     stroke = ColorField(format='rgba', verbose_name='Цвет границы')
-    stroke_width = models.CharField(max_length=20, verbose_name='Ширина границы')
+    stroke_width = models.IntegerField(blank=True, default=1, verbose_name='Ширина границы')
+    title = models.CharField(max_length=255, blank=True, verbose_name='Заголовок')
+    description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
 
     class Meta:
         verbose_name = 'Полигон'
@@ -164,6 +171,11 @@ class VideoPoint(models.Model):
     )
     coordinates = models.JSONField(verbose_name='Координаты точек видео')
     enable_chroma_key = models.BooleanField(default=False, verbose_name='Хромакей')
+    color_chroma_key = models.CharField(
+        max_length=35,
+        default='rgba(4, 244, 5, 1);',
+        verbose_name='Цвет хромакея',
+    )
 
     class Meta:
         verbose_name = 'Видео'
@@ -200,12 +212,27 @@ class PolyLinePoint(models.Model):
         related_name='polyline_points',
         verbose_name='Фотосфера',
     )
-    coordinates = models.JSONField(verbose_name='Координаты точек линии')
+    coordinates = models.JSONField(blank=True, default=[], verbose_name='Координаты точек линии')
 
+    title = models.CharField(max_length=255, blank=True, verbose_name='Заголовок')
+    description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
     stroke = ColorField(format='rgba', verbose_name='Цвет линии')
-    stroke_width = models.CharField(max_length=20, verbose_name='Ширина линии')
-    stroke_linecap = models.CharField(max_length=20, verbose_name='Cтиль концов линии')
-    stroke_linejoin = models.CharField(max_length=20, verbose_name='Стиль соединения углов линии')
+    stroke_width = models.CharField(
+        max_length=20,
+        blank=True,
+        default=1,
+        verbose_name='Ширина линии',
+    )
+    stroke_linecap = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name='Cтиль концов линии',
+    )
+    stroke_linejoin = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name='Стиль соединения углов линии',
+    )
 
     class Meta:
         verbose_name = 'Линия'

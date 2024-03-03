@@ -1,89 +1,218 @@
 {% load static %}
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gispace</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'sphereapp/style.css' %}">
-    <link rel="icon" href="{% static 'sphereapp/images/favicon.ico' %}" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
-    <script>
-      window.project = '{{ project }}';
-      window.locationID = '{{ location_id }}';
-      window.imageID = '{{ image_id }}';
-    </script>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
-                "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
-                "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gispace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'guidein_space/style.css' %}">
+  <link rel="icon" href="{% static 'guidein_space/images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
 
-    <script src="{% static 'sphereapp/vendor/sweetalert2.all.min.js' %}"></script>
-    <script src="{% static 'sphereapp/vendor/three.min.js' %}"></script>
-    <script src="{% static 'sphereapp/vendor/panolens.min.js' %}"></script>
-    <script type="module" src="{% static 'sphereapp/main.js' %}"></script>
+  <script>
+    window.project = '{{ project }}';
+    window.locationID = '{{ location_id }}';
+    window.imageID = '{{ image_id }}';
+    window.isSuperuser = {{ is_superuser }};
+  </script>
+  <script type="importmap">
+      {
+          "imports": {
+              "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+              "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.js",
+              "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.js"
+          }
+      }
+  </script>
+
+  <script src="{% static 'guidein_space/vendor/sweetalert2.all.min.js' %}"></script>
+  <script src="{% static 'guidein_space/vendor/three.min.js' %}"></script>
+  <script src="{% static 'guidein_space/vendor/panolens.min.js' %}"></script>
+  <script type="module" src="{% static 'guidein_space/main.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
 </head>
 <body>
   <div class="main-container">
     <div class="image-container">
       {% if request.user.is_superuser %}
-        <div class="ButtonsAdminCreatePoints">
-          <button id="addPointModeBtn1">Включить добавление точки информации</button>
+        <div class="admin-panel">
+          <div class="buttons-panel">
+            <div id="info-button" class="button-item" > <img class="image-item" src="{% static 'guidein_space/images/info-button-icon.png' %}"> </div>
+            <div id="move-button" class="button-item" > <img class="image-item" src="{% static 'guidein_space/images/move-button-icon.png' %}"> </div>
+            <div id="polygon-button" class="button-item" > <img class="image-item" src="{% static 'guidein_space/images/polygon-button-icon.png' %}"> </div>
+            <div id="polyline-button" class="button-item" > <img class="image-item" src="{% static 'guidein_space/images/line-button-icon.png' %}"> </div>
+            <div id="video-button" class="button-item" > <img class="image-item" src="{% static 'guidein_space/images/video-button-icon.png' %}"> </div>
+            <div id="image-button" class="button-item" > <img class="image-item" src="{% static 'guidein_space/images/image-button-icon.png' %}"> </div>
+          </div>
+          <div class="admin-add-point">
+            <div class="form-move-point">
+              <h1>Создать точку перемещения</h1>
 
-          <button id="addPointModeBtn2">Включить добавление точки телепортации</button>
+              <div class="dropdown">
+                <div class="select">
+                <span class="selected">Фотосфера не выбрана</span>
+                <div class="caret"></div>
+                </div>
+                <ul class="menu"></ul>
+              </div>
 
-          <button id="addPolygonModeBtn3">Включить добавление полигона</button>
+              <button type="submit" class="submit-move-btn">Создать</button>
+            </div>
 
-          <button id="addVideoModeBtn4">Включить добавление Видео</button>
+            <div class="form-info-point">
+              <h1>Создать точку информации</h1>
 
-          <button id="addImageModeBtn5">Включить добавление Изображения</button>
+              <div class="input-box">
+                <input type="text" placeholder="Название" id="title-input-info">
+              </div>
 
-          <button id="addPolyLineModeBtn6">Включить добавление линии</button>
+              <div class="area-box">
+                <textarea placeholder="Описание" id="description-input-info"></textarea>
+              </div>
 
-          <input type="file" name="videoFile" id="file">
+              <button type="submit" class="submit-info-btn">Создать</button>
+            </div>
 
-          <button id="addDataSend">Продолжить</button>
+            <div class="form-image-point">
+              <h1>Создать точку изображения</h1>
+
+              <label for="input-file-image" id="drop-area-image">
+                <input type="file" accept="image/*" id="input-file-image" hidden>
+
+                <div id="image-view">
+                  <img src="{% static 'guidein_space/images/upload-icon.png' %}">
+                  <p>Перенесите сюда изображение или нажмите <br> для загрузки изображения</p>
+                </div>
+              </label>
+
+              <button type="submit" class="submit-image-btn">Создать</button>
+            </div>
+
+            <div class="form-video-point">
+              <h1>Создать видео точку</h1>
+
+              <div class="chromakey-switch">
+                <p>Вырезать хромакей</p>
+                <input type="checkbox" id="chromakey-switch-video">
+                <label for="chromakey-switch-video" class="button"></label>
+              </div>
+
+              <div class="chromakey-input">
+                <p>Выберите цвет хромакея на видео</p>
+                <div class="chromakey-eyedrop" style="background: rgb(167, 34, 244);" id="chromakey-color">
+                  <img id="eyedropper" src="{% static 'guidein_space/images/eyedropper-icon.png' %}">
+                </div>
+              </div>
+
+              <label for="input-file-video" id="drop-area-video">
+                <input type="file" accept="video/*" id="input-file-video" hidden>
+
+                <div id="video-view">
+                  <img src="{% static 'guidein_space/images/upload-icon.png' %}">
+                  <p>Перенесите сюда видео или нажмите <br> для загрузки видео</p>
+                </div>
+              </label>
+
+              <button type="submit" class="submit-video-btn">Создать</button>
+            </div>
+
+            <div class="form-polygone-point">
+              <h1>Создать точку полигона</h1>
+              <div class="fill-polygone">
+                <p>Цвет заливки полигона</p>
+                <div class="color-picker-fill"></div>
+                <p>Прозрачность полигона</p>
+                <div class="range">
+                  <div class="range-content">
+                    <div class="range-slider">
+                      <div class="range-slider-line" id="range-line-fill-polygone"></div>
+                    </div>
+
+                    <div class="range-thumb" id="range-thumb-fill-polygone">
+                      <div class="range-value">
+                        <span class="range-value-number" id="range-number-fill-polygone">0.5</span>
+                      </div>
+                    </div>
+
+                    <input type="range" class="range-input" id="range-input-fill-polygone" min="0" max="1" value="0.5" step="0.1">
+                  </div>
+                </div>
+              </div>
+
+              <div class="stroke-polygone">
+                <p>Цвет границы полигона</p>
+                <div class="color-picker-stroke"></div>
+                <p>Ширина границы</p>
+                <div class="range">
+                  <div class="range-content">
+                    <div class="range-slider">
+                      <div class="range-slider-line" id="range-line-stroke-polygone"></div>
+                    </div>
+
+                    <div class="range-thumb" id="range-thumb-stroke-polygone">
+                      <div class="range-value">
+                        <span class="range-value-number" id="range-number-stroke-polygone">5</span>
+                      </div>
+                    </div>
+
+                    <input type="range" class="range-input" id="range-input-stroke-polygone" min="0" max="10" value="5" step="1">
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-box">
+                <input type="text" placeholder="Название" id="title-input-polygone">
+              </div>
+
+              <div class="area-box">
+                <textarea placeholder="Описание" id="description-input-polygone"></textarea>
+              </div>
+
+              <button type="submit" class="submit-polygon-btn">Создать</button>
+            </div>
+
+            <div class="form-polyline-point">
+              <h1>Создать точку линии</h1>
+
+              <div class="stroke-polyline">
+                <p>Цвет линии</p>
+                <div class="color-picker-stroke-polyline"></div>
+                <p>Ширина линии</p>
+                <div class="range">
+                  <div class="range-content">
+                    <div class="range-slider">
+                      <div class="range-slider-line" id="range-line-polyline-stroke"></div>
+                    </div>
+
+                    <div class="range-thumb" id="range-thumb-polyline-stroke">
+                      <div class="range-value">
+                        <span class="range-value-number" id="range-number-polyline-stroke">5</span>
+                      </div>
+                    </div>
+
+                    <input type="range" class="range-input" id="range-input-polyline-stroke" min="0" max="10" value="5" step="1">
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-box">
+                <input type="text" placeholder="Название" id="title-input-polyline">
+              </div>
+
+              <div class="area-box">
+                <textarea placeholder="Описание" id="description-input-polyline"></textarea>
+              </div>
+
+              <button type="submit" class="submit-polyline-btn">Создать</button>
+            </div>
+          </div>
         </div>
       {% endif %}
     </div>
-    <div class="window_infopoint">
-      <form id="info-form">
-        <div class="close_menu_form" ></div>
-        <h1>Создать точку информации</h1>
 
-        <div class="input-box">
-          <input type="text" placeholder="Название" id="title_input">
-        </div>
-
-        <div class="area-box">
-          <textarea placeholder="Описание" id="description_input"></textarea>
-        </div>
-
-        <button type="submit" class="createinfobtn">Создать</button>
-      </form>
-    </div>
-    <div class="window_movepoint">
-      <form>
-        <div class="close_menu_form"></div>
-        <h1>Создать точку телепортации</h1>
-
-        <div class="dropdown">
-          <div class="select">
-          <span class="selected">Фотосфера не выбрана</span>
-          <div class="caret"></div>
-          </div>
-          <ul class="menu"></ul>
-        </div>
-
-        <button type="submit" class="createmovebtn">Создать</button>
-      </form>
-    </div>
     <header class="header">
       <a href="{% url 'index' %}" class="logo">Gispace</a>
       <div class="menu-hamburger" id="burger-icon">
@@ -108,9 +237,7 @@
               <li class="menu-item"><a id="user-name" href="#">{{ user }}</a></li>
               <form class="form-entranse" method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                {% if user.is_authenticated %}
-                  <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
-                {% endif %}
+                <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
               </form>
             {% else %}
               <li class="menu-item"><a href="{% url 'register' %}">Регистрация</a></li>
