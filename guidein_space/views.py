@@ -85,6 +85,7 @@ class RenderPhotosphereView(TemplateView):
                 'project': kwargs.get('project'),
                 'location_id': kwargs.get('location_id'),
                 'image_id': kwargs.get('image_id'),
+                'is_superuser': str(self.request.user.is_superuser).lower(),
             },
         )
 
