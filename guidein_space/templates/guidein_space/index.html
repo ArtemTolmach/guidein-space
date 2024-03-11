@@ -1,0 +1,70 @@
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gispace</title>
+  <link rel="stylesheet" href="{% static 'guidein_space/home_page/home_page_style.css' %}">
+  <link rel="icon" href="{% static 'guidein_space/images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+</head>
+<body>
+  <div class="main-container">
+    <header>
+      <a href="#" class="logo">Gispace</a>
+      <div class="menu-hamburger" id="burger-icon">
+        <span></span>
+      </div>
+      <div class="menu-bar">
+        <ul class="navigation">
+          <li class="menu-item">
+            <a href="#about-us">О Нас</a>
+          </li>
+          <li class="menu-item">
+            <a href="{% url 'login' %}">Войти</a>
+          </li>
+          <li class="menu-item">
+            <a href="{% url 'register' %}">Регистрация</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <form class="search">
+      <img src="{% static 'guidein_space/images/search.png' %}" class="search-icon">
+      <input class="search-input" type="search" placeholder="Поиск">
+    </form>
+    <div class="image-container">
+    </div>
+    <div class="other-container">
+      <div class="overview-container">
+        <a class="caption">Проекты</a>
+        <div class="projects-container">
+          {%  for project in object_list %}
+            {% if project.main_sphere__id %}
+              <div class="one-project-container">
+                <img class="img-project" src="{{ project.cover.url }}">
+                <a class="project-name" href="/{{ project.name }}/{{ project.main_location_id }}/{{ project.main_sphere__id }}">{{ project.name }}</a>
+                <a class="project-bio">{{ project.bio }}</a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="about-us-container">
+        <a class="caption" id="about-us">О Нас</a>
+        <a class="describe-gispy">GuideIn Space — это социальная сеть для пространств и мест,
+          позволяющая пользователям погрузиться в уникальные места со всего мира, с помощью виртуальных туров на основе технологии 360° фотосфер.
+          <br>
+          <p>От культурных объектов и природных чудес до городских пейзажей и музеев,
+          GISPACE предоставляет возможность исследовать разнообразные места прямо из дома или офиса, используя только телефон или компьютер.</p></a>
+        <img class="img-steps" src="{% static 'guidein_space/images/steps.png' %}">
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'guidein_space/vendor/three.min.js' %}"></script>
+  <script src="{% static 'guidein_space/vendor/panolens.min.js' %}"></script>
+  <script src="{% static 'guidein_space/home_page/home_page.js' %}"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Sixtyfour&display=swap')
+  </style>
+</body>
