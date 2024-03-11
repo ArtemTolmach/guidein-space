@@ -81,9 +81,7 @@
                             <li class="menu-item"><a id="user-name" href="#">{{ user }}</a></li>
                             <form class="form-entranse" method="post" action="{% url 'logout' %}">
                               {% csrf_token %}
-                                {% if user.is_authenticated %}
-                                    <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
-                                    {% endif %}
+                              <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
                             </form>
                         {% else %}
                             <li class="menu-item"><a href="{% url 'register' %}">Регистрация</a></li>
