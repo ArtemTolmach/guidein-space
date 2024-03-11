@@ -28,5 +28,5 @@ if settings.DEBUG:
 urlpatterns = [
     *development_urls,
     path('admin/', admin.site.urls),
-    path('', include('sphereapp.urls')),
+    path('', include('guidein_space.urls')),
 ]
