@@ -18,6 +18,11 @@ class User(AbstractUser):
 class Project(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
     bio = models.CharField(max_length=1000, blank=True, default='', verbose_name='Био')
+    cover = models.ImageField(
+        upload_to='covers/',
+        default='covers/default_cover.png',
+        verbose_name='Обложка',
+    )
     main_location = models.ForeignKey(
         'Location',
         null=True,
