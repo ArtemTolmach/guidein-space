@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.db.models import F
 from django.shortcuts import redirect
 from django.views import View
@@ -28,7 +28,7 @@ class LogoutView(View):
 
 class IndexView(ListView):
     template_name = 'sphereapp/index.html'
-    queryset = models.Project.objects.values('name', 'bio', 'main_location__id').annotate(
+    queryset = models.Project.objects.annotate(
         main_sphere__id=F('main_location__main_sphere__id'),
     )
 
