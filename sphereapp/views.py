@@ -102,7 +102,10 @@ class GetProjectLocationsView(generics.ListAPIView):
     lookup_url_kwarg = 'project'
 
     def get_queryset(self):
-        return models.Location.objects.filter(project__name=self.kwargs['project'])
+        return models.Location.objects.filter(
+            project__name=self.kwargs.get('project'),
+            main_sphere__isnull=False,
+        )
 
 
 class GetLocationPhotospheresView(generics.ListAPIView):
