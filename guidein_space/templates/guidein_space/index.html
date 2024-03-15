@@ -41,11 +41,13 @@
         <div class="projects-container">
           {%  for project in object_list %}
             {% if project.main_sphere__id %}
-              <div class="one-project-container">
-                <img class="img-project" src="{{ project.cover.url }}">
-                <a class="project-name" href="/{{ project.name }}/{{ project.main_location_id }}/{{ project.main_sphere__id }}">{{ project.name }}</a>
-                <a class="project-bio">{{ project.bio }}</a>
-              </div>
+              <a href="/{{ project.name }}/{{ project.main_location_id }}/{{ project.main_sphere__id }}">
+                <div class="one-project-container">
+                  <img class="img-project" src="{{ project.cover.url }}">
+                  <p class="project-name">{{ project.name }}</p>
+                  <p class="project-bio">{{ project.bio }}</p>
+                </div>
+              </a>
             {% endif %}
           {% endfor %}
         </div>
