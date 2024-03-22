@@ -1,8 +1,8 @@
 line-length = 100
 
-select = ["ALL"]
+lint.select = ["ALL"]
 
-ignore = [
+lint.ignore = [
     "ANN",    # flake8-annotations
     "D100",   # undocumented-public-module
     "D101",   # undocumented-public-class
@@ -20,7 +20,7 @@ exclude = ["*migrations*", ".git/", ".venv"]
 
 target-version = "py312"
 
-[flake8-quotes]
+[lint.flake8-quotes]
 inline-quotes = "single"
 
 [format]
