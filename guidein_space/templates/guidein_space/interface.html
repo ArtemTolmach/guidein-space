@@ -234,10 +234,12 @@
         <div class="auth-container">
           {% if user.is_authenticated %}
             <li class="menu-item"><a id="user-name" href="#">{{ user }}</a></li>
-            <form class="menu-item" method="post" action="{% url 'logout' %}?next={{ request.path }}">
-              {% csrf_token %}
-              <button type="submit">Выйти</button>
-            </form>
+            <li class="menu-item">
+                <form id="logout-form" class="menu-item" method="post" action="{% url 'logout' %}?next={{ request.path }}">
+                    {% csrf_token %}
+                    <a href="#" onclick="document.getElementById('logout-form').submit()">Выйти</a>
+                </form>
+            </li>
           {% else %}
             <li class="menu-item"><a href="{% url 'register' %}?next={{ request.path }}">Регистрация</a></li>
             <li class="menu-item"><a href="{% url 'login' %}?next={{ request.path }}">Войти</a></li>
