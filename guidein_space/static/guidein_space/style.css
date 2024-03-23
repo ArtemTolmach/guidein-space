@@ -23,6 +23,7 @@ form {
     border: 0;
     padding: 27px;
     font-size: 18px;
+    margin-top: 0.3px;
 }
 
 .menu-item > button:hover {

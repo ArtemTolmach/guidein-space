@@ -24,9 +24,9 @@
             <li class="menu-item">
               <a id="user-name" href="#">{{ user }}</a>
             </li>
-            <form class="menu-item" method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit">Выйти</button>
+            <form id="logout-form" class="menu-item" method="post" action="{% url 'logout' %}?next={{ request.path }}">
+                {% csrf_token %}
+                <a onclick="document.getElementById('logout-form').submit()">Выйти</a>
             </form>
           {% else %}
             <li class="menu-item">
