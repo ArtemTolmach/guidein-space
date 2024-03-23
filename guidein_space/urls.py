@@ -8,7 +8,6 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', views.IndexView.as_view(), name='index'),
     path('register/', views.RegisterView.as_view(), name='register'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
     path(
         '<str:project>/<int:location_id>/<int:image_id>/',
         views.RenderPhotosphereView.as_view(),

@@ -20,12 +20,22 @@
           <li class="menu-item">
             <a href="#about-us">О Нас</a>
           </li>
-          <li class="menu-item">
-            <a href="{% url 'login' %}">Войти</a>
-          </li>
-          <li class="menu-item">
-            <a href="{% url 'register' %}">Регистрация</a>
-          </li>
+          {% if user.is_authenticated %}
+            <li class="menu-item">
+              <a id="user-name" href="#">{{ user }}</a>
+            </li>
+            <form class="menu-item" method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Выйти</button>
+            </form>
+          {% else %}
+            <li class="menu-item">
+              <a href="{% url 'login' %}">Войти</a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'register' %}">Регистрация</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </header>

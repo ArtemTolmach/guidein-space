@@ -1,7 +1,6 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.db.models import F
 from django.shortcuts import redirect
-from django.views import View
 from django.views.generic import FormView, ListView, TemplateView
 from rest_framework import generics, permissions
 
@@ -16,13 +15,6 @@ class RegisterView(FormView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('index')
-
-
-class LogoutView(View):
-    @staticmethod
-    def post(request):
-        logout(request)
         return redirect('index')
 
 
