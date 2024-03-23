@@ -172,7 +172,6 @@ header .menu-bar .navigation {
     justify-content: flex-end;
     list-style-type: none;
     margin: 0;
-    padding: 0;
 }
 
 header .menu-hamburger {
@@ -181,7 +180,6 @@ header .menu-hamburger {
 
 .navigation .menu-item {
     display: flex;
-    align-items: flex-end;
     padding-right: 5vh;
     padding-bottom: 1.1vh;
 }
@@ -192,6 +190,23 @@ header .menu-hamburger {
     font-family: Roboto, system-ui;
     text-decoration: none;
     font-weight: 600;
+    margin: 0;
+}
+
+form {
+    margin: 0;
+}
+
+button {
+    color: #fff;
+    font-size: 25px;
+    font-family: Roboto, system-ui;
+    text-decoration: none;
+    font-weight: 600;
+    background: 0;
+    border: 0;
+    padding-bottom: 0;
+    cursor: pointer;
 }
 
 .search {
@@ -331,7 +346,7 @@ input[type="search"]::-webkit-search-cancel-button {
         margin-top: 8vh;
     }
 
-    .menu-item a {
+    .menu-item a, button {
         font-size: 35px;
     }
 

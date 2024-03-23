@@ -33,6 +33,7 @@
   <script type="module" src="{% static 'guidein_space/main.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 
+  {% csrf_token %}
 </head>
 <body>
   <div class="main-container">
@@ -232,17 +233,16 @@
           </li>
         </ul>
         <div class="auth-container">
-          {% csrf_token %}
-            {% if user.is_authenticated %}
-              <li class="menu-item"><a id="user-name" href="#">{{ user }}</a></li>
-              <form class="form-entranse" method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" id="exitUser" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-init  data-mdb-ripple-color="dark">Выйти</button>
-              </form>
-            {% else %}
-              <li class="menu-item"><a href="{% url 'register' %}">Регистрация</a></li>
-              <li class="menu-item"><a href="{% url 'login' %}">Войти</a></li>
-            {% endif %}
+          {% if user.is_authenticated %}
+            <li class="menu-item"><a id="user-name" href="#">{{ user }}</a></li>
+            <form class="menu-item" method="post" action="{% url 'logout' %}?next={{ request.path }}">
+              {% csrf_token %}
+              <button type="submit">Выйти</button>
+            </form>
+          {% else %}
+            <li class="menu-item"><a href="{% url 'register' %}">Регистрация</a></li>
+            <li class="menu-item"><a href="{% url 'login' %}">Войти</a></li>
+          {% endif %}
         </div>
       </div>
     </header>
