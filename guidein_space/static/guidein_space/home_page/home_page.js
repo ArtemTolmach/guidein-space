@@ -11,6 +11,10 @@ const viewer = new PANOLENS.Viewer({
 viewer.add(homePagePhotosphere);
 viewer.OrbitControls.noZoom = true;
 
+if (window.innerWidth < 900) {
+    ImageContainer.style.pointerEvents = 'none';
+}
+
 const menuHamburger = document.querySelector(".menu-hamburger");
 const menuBar = document.querySelector(".menu-bar");
 const html = document.querySelector("html");
