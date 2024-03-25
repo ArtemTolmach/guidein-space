@@ -15,7 +15,9 @@ class RegisterView(FormView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('index')
+
+        next_url = self.request.GET.get('next', 'index')
+        return redirect(next_url)
 
 
 class IndexView(ListView):

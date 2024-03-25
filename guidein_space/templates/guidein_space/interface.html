@@ -239,8 +239,8 @@
               <button type="submit">Выйти</button>
             </form>
           {% else %}
-            <li class="menu-item"><a href="{% url 'register' %}">Регистрация</a></li>
-            <li class="menu-item"><a href="{% url 'login' %}">Войти</a></li>
+            <li class="menu-item"><a href="{% url 'register' %}?next={{ request.path }}">Регистрация</a></li>
+            <li class="menu-item"><a href="{% url 'login' %}?next={{ request.path }}">Войти</a></li>
           {% endif %}
         </div>
       </div>
