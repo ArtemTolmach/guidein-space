@@ -13,7 +13,7 @@
     <div class="image-container">
     </div>
     <div class="wrapper">
-      <form action="{% url 'register' %}" method="post">
+      <form action="{{ request.get_full_path }}" method="post">
         {% csrf_token %}
         <h1>Регистрация</h1>
         <div class="input-box">
