@@ -185,7 +185,7 @@ header .menu-hamburger {
     border-radius: 0.5em;
     color: #9fa5b5;
     position: absolute;
-    top: 3em;
+    top: 32px;
     left: 50%;
     width: 100%;
     transform: translateX(-50%);
@@ -226,7 +226,7 @@ li.invisible {
 .menu-open {
     display: block;
     opacity: 1;
-    height: 10vh;
+    max-height: 100px;
 }
 
 .image-container .admin-panel .buttons-panel {
