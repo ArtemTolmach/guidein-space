@@ -77,7 +77,20 @@ body::-webkit-scrollbar-thumb {
     min-width: 200px;
 }
 
-.one-project-container .project-name {
+.one-project-container .href-to-project {
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+
+.href-to-project .project-name {
     color: #fff;
     font-size: 35px;
     font-family: Roboto, system-ui;
@@ -116,9 +129,9 @@ body::-webkit-scrollbar-thumb {
     font-size: 25px;
     color: #fff;
     margin: 2.5vh 0 0 0;
-    text-align: left;
     line-height: 38px;
     text-indent: 65px;
+    text-align: justify;
 }
 
 .other-container  .about-us-container {
@@ -134,10 +147,11 @@ body::-webkit-scrollbar-thumb {
 }
 
 .one-project-container .img-project {
-    margin: 35px 35px 25px 35px;
+    width: 80%;
+    margin: 6%;
     border-radius: 12px;
-    max-height: 27vh;
-    max-width: 70vh;
+    max-height: 25vh;
+    max-width: 85%;
 }
 
 header {
@@ -273,13 +287,14 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 
     .one-project-container .img-project {
-        margin: 25px 25px 20px 25px;
+        margin: 8%;
     }
 
     .one-project-container .project-name {
         font-size: 25px;
         font-weight: 400;
         margin: 0 25px 0 25px;
+        word-wrap: break-word;
     }
 
     .one-project-container .project-bio {
@@ -290,7 +305,6 @@ input[type="search"]::-webkit-search-cancel-button {
     .about-us-container .describe-gispy {
         font-size: 18px;
         margin: 2vh 0 0 0;
-        text-align: center;
         line-height: 30px;
         text-indent: 35px;
     }
