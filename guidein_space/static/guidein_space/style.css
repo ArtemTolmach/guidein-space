@@ -18,9 +18,11 @@ form {
 
 .menu-item > button {
     color: #fff;
+    font-family: Roboto, system-ui;
     background: 0;
     border: 0;
-    padding-bottom: 0;
+    padding: 27px;
+    font-size: 18px;
 }
 
 .menu-item > button:hover {
@@ -46,14 +48,14 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: Roboto, system-ui;
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(48px);
     box-shadow: 0 5px 25px rgb(0 0 0/ 20%);
-    padding: 0 10px 0 100px;
     transition: 0.6s;
 }
 
@@ -64,6 +66,7 @@ header .logo {
     text-transform: uppercase;
     text-decoration: none;
     letter-spacing: 2px;
+    padding: 0 10px 0 100px;
 }
 
 header .navigation {
@@ -103,7 +106,6 @@ header .menu-hamburger {
     font-size: 18px;
     text-decoration: none;
     margin: 20px;
-    padding: 25px 0;
 }
 
 .menu-item > a:hover {
@@ -786,12 +788,19 @@ input:checked + .button::before {
         align-items: center;
     }
 
-    .menu-item > a {
+    .menu-item > a, form.menu-item {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0;
         font-size: 22px;
+    }
+
+    .menu-item > button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        padding: 25px;
     }
 
     .image-container .admin-panel {
@@ -799,13 +808,12 @@ input:checked + .button::before {
     }
 
     header .menu-hamburger {
-        z-index: 10001;
+        z-index: 1000;
         display: flex;
         position: absolute;
         align-items: center;
         justify-content: flex-end;
-        top: 20px;
-        right: 10px;
+        right: 10vw;
         width: 50px;
         height: 35px;
     }
