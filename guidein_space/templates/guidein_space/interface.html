@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gispace</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'guidein_space/vendor/font-awersome/all.min.css' %}">
   <link rel="stylesheet" href="{% static 'guidein_space/style.css' %}">
   <link rel="icon" href="{% static 'guidein_space/images/favicon.ico' %}" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
+  <link rel="stylesheet" href="{% static 'guidein_space/vendor/photo-sphere-viewer/core/index.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'guidein_space/vendor/pickr/themes/classic.min.css' %}"/>
 
   <script>
     window.project = '{{ project }}';
@@ -19,18 +19,16 @@
   <script type="importmap">
       {
           "imports": {
-              "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
-              "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5.7.2/index.module.js",
-              "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5.7.2/index.module.js"
+              "three": "{% static 'guidein_space/vendor/three.module.min.js' %}",
+              "@photo-sphere-viewer/core": "{% static 'guidein_space/vendor/photo-sphere-viewer/core/index.module.min.js' %}",
+              "@photo-sphere-viewer/markers-plugin": "{% static 'guidein_space/vendor/photo-sphere-viewer/markers-plugin/index.module.min.js' %}"
           }
       }
   </script>
 
   <script src="{% static 'guidein_space/vendor/sweetalert2.all.min.js' %}"></script>
-  <script src="{% static 'guidein_space/vendor/three.min.js' %}"></script>
-  <script src="{% static 'guidein_space/vendor/panolens.min.js' %}"></script>
   <script type="module" src="{% static 'guidein_space/main.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+  <script src="{% static 'guidein_space/vendor/pickr/pickr.min.js' %}"></script>
 
   {% csrf_token %}
 </head>
