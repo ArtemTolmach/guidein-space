@@ -9,6 +9,7 @@ User = get_user_model()
 
 class LocationInline(admin.TabularInline):
     model = models.Location
+    form = forms.LocationForm
     extra = 1
     fk_name = 'project'
 
