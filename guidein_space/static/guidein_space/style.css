@@ -8,6 +8,7 @@ body {
     text-decoration: none;
     box-sizing: border-box;
     overflow-y: auto;
+    font-family: Roboto, system-ui;
 }
 
 form {
@@ -18,7 +19,6 @@ form {
 
 .menu-item > button {
     color: #fff;
-    font-family: Roboto, system-ui;
     background: 0;
     border: 0;
     padding: 27px;
@@ -53,7 +53,6 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: Roboto, system-ui;
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(48px);
     box-shadow: 0 5px 25px rgb(0 0 0/ 20%);
