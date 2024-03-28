@@ -31,3 +31,19 @@ menuHamburger.addEventListener('click', () => {
         html.classList.remove('no-scroll');
     });
 });
+
+const projects = document.querySelectorAll('.suggestion-item');
+const suggestions = document.querySelector('.suggestions');
+const searchInput = document.querySelector('.search-input');
+
+searchInput.oninput = () => {
+    let inputValue = searchInput.value.toLowerCase();
+
+    for (const project of projects) {
+        if (project.innerText.toLowerCase().search(inputValue) === -1 || inputValue === '') {
+            project.classList.add('hide');
+        } else {
+            project.classList.remove('hide');
+        }
+    }
+};

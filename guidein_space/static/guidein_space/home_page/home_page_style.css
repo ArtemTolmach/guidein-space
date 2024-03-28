@@ -30,6 +30,88 @@ body::-webkit-scrollbar-thumb {
     border-radius: 20px;
 }
 
+.suggestions::-webkit-scrollbar-thumb {
+    background-color: #5d5d5d;
+    border-radius: 5px;
+}
+
+.suggestions::-webkit-scrollbar {
+    width: 10px;
+}
+
+.suggestions {
+    width: 90%;
+    bottom: 32%;
+    position: relative;
+    max-height: 50vh;
+    line-height: 50px;
+    border-radius: 0 0 10px 10px;
+    transition: 0.3s;
+    background: #20232aba;
+    backdrop-filter: blur(50px);
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    overflow-y: auto;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+
+}
+
+.suggestion-item {
+    padding: 7px 0 7px 7px;
+    -webkit-box-shadow: inset 0px -30px 5px -30px rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0px -30px 5px -30px rgba(255, 255, 255, 0.2);
+}
+
+.suggestion-img-project {
+    position: relative;
+    height: 10vh;
+}
+
+.suggestion-href-to-project {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    text-decoration: none;
+}
+
+.suggestion-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    height: 10vh;
+}
+
+.suggestion-project-name {
+    color: #fff;
+    font-size: 25px;
+    font-family: Roboto, system-ui;
+    font-weight: 500;
+    text-align: left;
+    margin: 0 0 0 20px;
+    height: 4vh;
+}
+
+.suggestion-project-bio {
+    color: #89888E;
+    font-size: 20px;
+    font-family: Roboto, system-ui;
+    font-weight: 300;
+    text-align: left;
+    margin: 0 0 0 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 42vh;
+}
+
+.hide {
+    display: none;
+}
+
 .main-container {
     display: block;
     height: auto;
@@ -253,6 +335,15 @@ header .menu-hamburger {
     cursor: pointer;
 }
 
+.search-container {
+    margin-top: 43vh;
+    min-height: 50px;
+    height: 4vh;
+    position: absolute;
+    width: 45%;
+    left: 50%;
+}
+
 .search {
     background: -o-linear-gradient(315deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
@@ -261,13 +352,8 @@ header .menu-hamburger {
     -webkit-box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     border-radius: 30px;
-    margin-top: 43vh;
-    min-height: 50px;
-    height: 4vh;
-    position: absolute;
+    position: relative;
     z-index: 998;
-    width: 45%;
-    left: 50%;
     -webkit-transform: translateX(-50%);
         -ms-transform: translateX(-50%);
             transform: translateX(-50%);
@@ -277,7 +363,7 @@ header .menu-hamburger {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    padding: 5px;
+    padding: 15px;
 }
 
 .search .search-icon {
@@ -349,11 +435,43 @@ input[type="search"]::-webkit-search-cancel-button {
         font-size: 40px;
     }
 
+    .suggestions {
+        width: 31vh;
+        bottom: 40%;
+        max-height: 55vh;
+    }
+
+    .suggestion-img-project {
+        position: relative;
+        height: 6vh;
+    }
+
+    .suggestion-text {
+        height: unset;
+    }
+
+    .suggestion-project-name {
+        height: unset;
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .suggestion-project-bio {
+        height: unset;
+        font-size: 15px;
+        line-height: 20px;
+        max-width: 20vh;
+    }
+
     .search {
+        padding: 10px;
+        width: 34vh;
+    }
+
+    .search-container {
         margin-top: 33vh;
         min-height: 40px;
         height: 2vh;
-        width: 80%;
     }
 
     .overview-container .caption, .about-us-container .caption {

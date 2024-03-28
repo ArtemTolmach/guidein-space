@@ -39,10 +39,29 @@
         </ul>
       </div>
     </header>
-    <form class="search">
-      <img src="{% static 'guidein_space/images/search.png' %}" class="search-icon">
-      <input class="search-input" type="search" placeholder="Поиск">
-    </form>
+    <div class="search-container">
+      <form class="search">
+        <img src="{% static 'guidein_space/images/search.png' %}" class="search-icon">
+        <input class="search-input" type="search" placeholder="Поиск">
+      </form>
+      <ul class="suggestions">
+        {%  for project in object_list %}
+            {% if project.main_sphere__id %}
+                <li class="suggestion-item hide">
+                  <a class="suggestion-href-to-project" href="/{{ project.name }}/{{ project.main_location_id }}/{{ project.main_sphere__id }}">
+                    <div>
+                      <img class="suggestion-img-project" src="{{ project.cover.url }}">
+                    </div>
+                    <div class="suggestion-text">
+                      <span class="suggestion-project-name">{{ project.name }}</span>
+                      <span class="suggestion-project-bio">{{ project.bio }}</span>
+                    </div>
+                  </a>
+                </li>
+            {% endif %}
+          {% endfor %}
+      </ul>
+    </div>
     <div class="image-container">
     </div>
     <div class="other-container">
