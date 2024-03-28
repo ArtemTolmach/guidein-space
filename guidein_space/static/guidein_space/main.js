@@ -48,8 +48,6 @@ const navigation = document.querySelector('.navigation');
 menuHamburger.addEventListener('click', () => {
     menuHamburger.classList.toggle('active');
     navigation.classList.toggle('active');
-
-    dropdownContainer.classList.remove('menu-open');
 });
 
 fetch('/api/locations/' + window.project)
