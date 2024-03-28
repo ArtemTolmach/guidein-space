@@ -95,10 +95,6 @@ body::-webkit-scrollbar-thumb {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
     width: 65vh;
     max-width: 70vh;
     min-width: 200px;
@@ -121,17 +117,15 @@ body::-webkit-scrollbar-thumb {
     color: #fff;
     font-size: 35px;
     font-family: Roboto, system-ui;
-    text-decoration: none;
     font-weight: 500;
     text-align:left;
     margin: 0 40px 0 40px;
 }
 
-.one-project-container .project-bio {
+.href-to-project .project-bio {
     color: #89888E;
     font-size: 25px;
     font-family: Roboto, system-ui;
-    text-decoration: none;
     font-weight: 300;
     text-align: left;
     margin: 15px 40px 35px 40px;
@@ -179,9 +173,9 @@ body::-webkit-scrollbar-thumb {
 .one-project-container .img-project {
     width: 80%;
     margin: 6%;
+    margin-bottom: 20px;
     border-radius: 12px;
     max-height: 25vh;
-    max-width: 85%;
 }
 
 header {
