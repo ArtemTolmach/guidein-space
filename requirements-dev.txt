@@ -1,3 +1,6 @@
+djangorestframework-stubs
+django-stubs[compatible-mypy]
+mypy
 ruff
 
 -r requirements.txt
