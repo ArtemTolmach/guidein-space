@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
+from drf_spectacular import views as spectacular_views
 
 from guidein_space import views
 
@@ -8,6 +9,12 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', views.IndexView.as_view(), name='index'),
     path('register/', views.RegisterView.as_view(), name='register'),
+    path('api/schema/', spectacular_views.SpectacularAPIView.as_view(), name='schema'),
+    path(
+        'api/schema/swagger-ui/',
+        spectacular_views.SpectacularSwaggerView.as_view(url_name='schema'),
+        name='swagger-ui',
+    ),
     path(
         '<str:project>/<int:location_id>/<int:image_id>/',
         views.RenderPhotosphereView.as_view(),
