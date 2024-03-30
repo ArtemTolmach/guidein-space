@@ -12,6 +12,7 @@
   <div class="main-container">
     <div class="image-container">
     </div>
+    <a class="logo" href="{% url 'index' %}">Gispace</a>
     <div class="wrapper">
       <form action="{{ request.get_full_path }}" method="post">
         {% csrf_token %}
