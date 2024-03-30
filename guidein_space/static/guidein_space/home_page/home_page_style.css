@@ -171,11 +171,18 @@ body::-webkit-scrollbar-thumb {
 }
 
 .one-project-container .img-project {
-    width: 80%;
-    margin: 6%;
-    margin-bottom: 20px;
     border-radius: 12px;
-    max-height: 25vh;
+    max-width: 100%;
+    height: 100%;
+
+}
+
+.wrapper-img-project {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25vh;
+    margin: 3%;
 }
 
 header {
@@ -357,8 +364,10 @@ input[type="search"]::-webkit-search-cancel-button {
         margin: 20px 30px 10px 30px;
     }
 
-    .one-project-container .img-project {
-        margin: 8%;
+    .wrapper-img-project {
+        margin: 6%;
+        max-height: 25vh;
+        height: auto;
     }
 
     .one-project-container .project-name {
@@ -378,6 +387,7 @@ input[type="search"]::-webkit-search-cancel-button {
         margin: 2vh 0 0 0;
         line-height: 30px;
         text-indent: 35px;
+        text-align: justify;
     }
 
     header .menu-bar {
