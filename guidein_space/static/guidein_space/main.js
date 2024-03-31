@@ -41,6 +41,10 @@ const viewer = new Viewer({
     ],
 });
 
+viewer.addEventListener('ready', () => {
+  viewer.navbar.getButton('download').hide();
+}, { once: true });
+
 /* Элементы хедера */
 const menuHamburger = document.querySelector('.menu-hamburger');
 const navigation = document.querySelector('.navigation');
