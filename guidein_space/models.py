@@ -1,6 +1,6 @@
 import uuid
 
-from colorfield.fields import ColorField
+from colorfield.fields import ColorField  # type: ignore[import-untyped]
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
