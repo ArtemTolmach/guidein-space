@@ -9,7 +9,7 @@ from guidein_space.models import InformationPoint, Location, PhotoSphere, Projec
 
 
 class TestForms(TestCase):
-    def test_user_creation_form(self):
+    def test_user_creation_form(self) -> None:
         form = UserCreationForm(
             data={
                 'username': 'test',
@@ -20,18 +20,18 @@ class TestForms(TestCase):
         )
         self.assertTrue(form.is_valid())
 
-    def test_project_form(self):
+    def test_project_form(self) -> None:
         form = ProjectForm(data={'name': 'Test Project', 'bio': 'This is a test project'})
         self.assertTrue(form.is_valid())
 
-    def test_location_form(self):
+    def test_location_form(self) -> None:
         project = Project.objects.create(name='Test Project', bio='This is a test project')
         form = LocationForm(data={'name': 'Test Location', 'project': project})
         self.assertTrue(form.is_valid())
 
 
 class TestViews(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = Client()
         self.project = Project.objects.create(name='Test Project', bio='This is a test project')
         self.location = Location.objects.create(name='Test Location', project=self.project)
@@ -40,11 +40,11 @@ class TestViews(TestCase):
             location=self.location,
         )
 
-    def test_index_view(self):
+    def test_index_view(self) -> None:
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
 
-    def test_register_view(self):
+    def test_register_view(self) -> None:
         response = self.client.post(
             reverse('register'),
             data={
@@ -56,7 +56,7 @@ class TestViews(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_render_photosphere_view(self):
+    def test_render_photosphere_view(self) -> None:
         response = self.client.get(
             reverse(
                 'render-photosphere',
@@ -67,7 +67,7 @@ class TestViews(TestCase):
 
 
 class TestAPIViews(APITestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = APIClient()
         self.project = Project.objects.create(name='Test Project', bio='This is a test project')
         self.location = Location.objects.create(name='Test Location', project=self.project)
@@ -78,12 +78,12 @@ class TestAPIViews(APITestCase):
         self.location.main_sphere = self.photosphere
         self.location.save()
 
-    def test_get_photosphere_view(self):
+    def test_get_photosphere_view(self) -> None:
         response = self.client.get(f'/api/photosphere/{self.photosphere.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializers.PhotoSphereSerializer(self.photosphere).data)
 
-    def test_get_project_locations_view(self):
+    def test_get_project_locations_view(self) -> None:
         response = self.client.get(f'/api/locations/{self.project.name}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -94,7 +94,7 @@ class TestAPIViews(APITestCase):
             ).data,
         )
 
-    def test_get_location_photospheres_view(self):
+    def test_get_location_photospheres_view(self) -> None:
         response = self.client.get(f'/api/photospheres/{self.location.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -105,7 +105,7 @@ class TestAPIViews(APITestCase):
             ).data,
         )
 
-    def test_create_information_point_view(self):
+    def test_create_information_point_view(self) -> None:
         user = User.objects.create_superuser(
             'admin',
             'admin@example.com',

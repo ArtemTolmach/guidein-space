@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING, Any
+
 from django.contrib.auth import login
 from django.db.models import F
 from django.shortcuts import redirect
@@ -7,12 +9,18 @@ from rest_framework import generics, permissions
 from guidein_space import models, serializers
 from guidein_space.forms import UserCreationForm
 
+if TYPE_CHECKING:
+    from typing import Self
+
+    from django.db.models import QuerySet
+    from django.http.response import HttpResponse, HttpResponseBase, HttpResponseRedirect
+
 
 class RegisterView(FormView):
     template_name = 'registration/register.html'
     form_class = UserCreationForm
 
-    def form_valid(self, form):
+    def form_valid(self: 'Self', form: 'UserCreationForm') -> 'HttpResponseRedirect':
         user = form.save()
         login(self.request, user)
 
@@ -30,13 +38,13 @@ class IndexView(ListView):
 class RenderPhotosphereView(TemplateView):
     template_name = 'guidein_space/interface.html'
 
-    def dispatch(self, *args, **kwargs):
+    def dispatch(self: 'Self', *args: 'Any', **kwargs: 'Any') -> 'HttpResponseBase':
         if not models.Project.objects.filter(name=kwargs['project']).first():
             return redirect('index')
 
         return super().dispatch(self.request, *args, **kwargs)
 
-    def get(self, *_args, **kwargs):
+    def get(self: 'Self', *_args: 'Any', **kwargs: 'Any') -> 'HttpResponse':
         location = models.Location.objects.filter(
             pk=kwargs.get('location_id'),
             project__name=kwargs.get('project'),
@@ -71,7 +79,7 @@ class RenderPhotosphereView(TemplateView):
 
         return self.render_to_response(context)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self: 'Self', **kwargs: 'Any') -> dict[str, 'Any']:
         context = super().get_context_data(**kwargs)
 
         context.update(
@@ -96,7 +104,7 @@ class GetProjectLocationsView(generics.ListAPIView):
     lookup_field = 'project__name'
     lookup_url_kwarg = 'project'
 
-    def get_queryset(self):
+    def get_queryset(self: 'Self') -> 'QuerySet[Any]':
         return models.Location.objects.filter(
             project__name=self.kwargs.get('project'),
             main_sphere__isnull=False,
@@ -108,7 +116,7 @@ class GetLocationPhotospheresView(generics.ListAPIView):
     lookup_field = 'location__id'
     lookup_url_kwarg = 'location'
 
-    def get_queryset(self):
+    def get_queryset(self: 'Self') -> 'QuerySet[Any]':
         return models.PhotoSphere.objects.filter(location__id=self.kwargs['location_id'])
 
 
