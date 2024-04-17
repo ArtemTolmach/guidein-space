@@ -90,7 +90,7 @@ fetch('/api/photospheres/' + window.locationID)
         });
     });
 
-function renderMarkers() {
+window.renderMarkers = function renderMarkers() {
     fetch(('/api/photosphere/' + window.imageID))
         .then(response => response.json())
         .then(data => {
