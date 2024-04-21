@@ -14,6 +14,7 @@ lint.ignore = [
     "D107",   # undocumented-public-init
     "D211",   # blank-line-before-class
     "D213",   # multi-line-summary-second-line
+    "PT009",  # pytest-unittest-assertion
 ]
 
 exclude = ["*migrations*", ".git/", ".venv"]
