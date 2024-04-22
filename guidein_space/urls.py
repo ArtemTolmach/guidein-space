@@ -7,7 +7,6 @@ from guidein_space import views
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
-    path('', views.IndexView.as_view(), name='index'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('api/schema/', spectacular_views.SpectacularAPIView.as_view(), name='schema'),
     path(
@@ -74,6 +73,11 @@ urlpatterns = [
         'api/photospheres/polyline-points/',
         views.CreatePolyLinePointView.as_view(),
         name='polyline-points-api',
+    ),
+    path(
+        'api/photospheres/get-project-list/',
+        views.GetAllProjectsList.as_view(),
+        name='get-all-projects',
     ),
 ]
 
