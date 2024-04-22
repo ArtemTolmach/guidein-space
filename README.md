@@ -15,6 +15,9 @@ GuideIn-Space требует:
 ALLOWED_HOSTS=*
 DEBUG=true
 SECRET_KEY=secret
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+CORS_TRUSTED_ORIGINS=http://localhost:3000
+CORS_ALLOW_CREDENTIALS=True
 ```
 
 Затем создаем виртуальное окружение и устанавливаем в него зависимости (*при первой установке приложения*):
