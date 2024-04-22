@@ -66,6 +66,14 @@ class ProjectLocationSerializer(serializers.ModelSerializer):
         fields = ('name', 'id', 'main_sphere')
 
 
+class AllProjectsList(serializers.ModelSerializer):
+    main_location = ProjectLocationSerializer()
+
+    class Meta:
+        model = models.Project
+        fields = serializers.ALL_FIELDS
+
+
 class LocationPhotoSphereSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PhotoSphere

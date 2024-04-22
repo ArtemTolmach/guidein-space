@@ -1,7 +1,7 @@
 from django.contrib.auth import login
 from django.db.models import F
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView, TemplateView
+from django.views.generic import FormView, TemplateView
 from rest_framework import generics, permissions
 
 from guidein_space import models, serializers
@@ -18,13 +18,6 @@ class RegisterView(FormView):
 
         next_url = self.request.GET.get('next', 'index')
         return redirect(next_url)
-
-
-class IndexView(ListView):
-    template_name = 'guidein_space/index.html'
-    queryset = models.Project.objects.annotate(
-        main_sphere__id=F('main_location__main_sphere__id'),
-    )
 
 
 class RenderPhotosphereView(TemplateView):
@@ -110,6 +103,14 @@ class GetLocationPhotospheresView(generics.ListAPIView):
 
     def get_queryset(self):
         return models.PhotoSphere.objects.filter(location__id=self.kwargs['location_id'])
+
+
+class GetAllProjectsList(generics.ListAPIView):
+    queryset = models.Project.objects.filter(
+        main_location__isnull=False,
+        main_location__main_sphere__isnull=False,
+    )
+    serializer_class = serializers.AllProjectsList
 
 
 class CreateInformationPointView(generics.CreateAPIView):
