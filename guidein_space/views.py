@@ -46,12 +46,12 @@ class RenderPhotosphereView(TemplateView):
 
     def get(self: 'Self', *_args: 'Any', **kwargs: 'Any') -> 'HttpResponse':
         location = models.Location.objects.filter(
-            pk=kwargs.get('location_id'),
+            pk=kwargs.get('location_id', ''),
             project__name=kwargs.get('project'),
         ).first()
         photosphere = models.PhotoSphere.objects.filter(
-            pk=kwargs.get('image_id'),
-            location_id=kwargs.get('location_id'),
+            pk=kwargs.get('image_id', ''),
+            location_id=kwargs.get('location_id', ''),
         ).first()
 
         if not location:
