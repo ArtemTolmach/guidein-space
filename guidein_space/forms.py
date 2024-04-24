@@ -28,34 +28,30 @@ class UserCreationForm(DjangoUserCreationForm[models.User]):
 class ProjectForm(forms.ModelForm[models.Project]):
     class Meta:
         model = models.Project
-        fields = forms.ALL_FIELDS
+        fields = ('name', 'bio', 'cover', 'main_location')
 
     def __init__(self: 'Self', *args: 'Any', **kwargs: 'Any') -> None:
         super().__init__(*args, **kwargs)
-        queryset = self.fields['main_location'].queryset
         if self.instance.pk:
-            queryset = models.Location.objects.filter(
-                project=self.instance,
-            )
+            self.fields['main_location'].widget.choices = [
+                (location.pk, location.name)
+                for location in models.Location.objects.filter(project=self.instance)
+            ]
         else:
-            queryset = queryset.none()
-
-        self.fields['main_location'].queryset = queryset
+            self.fields['main_location'].widget.choices = []
 
 
 class LocationForm(forms.ModelForm[models.Location]):
     class Meta:
         model = models.Location
-        fields = forms.ALL_FIELDS
+        fields = ('name', 'project', 'main_sphere')
 
     def __init__(self: 'Self', *args: 'Any', **kwargs: 'Any') -> None:
         super().__init__(*args, **kwargs)
-        queryset = self.fields['main_sphere'].queryset
         if self.instance.pk:
-            queryset = models.PhotoSphere.objects.filter(
-                location=self.instance,
-            )
+            self.fields['main_sphere'].widget.choices = [
+                (sphere.pk, sphere.name)
+                for sphere in models.PhotoSphere.objects.filter(location=self.instance)
+            ]
         else:
-            queryset = queryset.none()
-
-        self.fields['main_sphere'].queryset = queryset
+            self.fields['main_sphere'].widget.choices = []
