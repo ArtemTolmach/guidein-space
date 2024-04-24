@@ -45,16 +45,20 @@ class RenderPhotosphereView(TemplateView):
         return super().dispatch(self.request, *args, **kwargs)
 
     def get(self: 'Self', *_args: 'Any', **kwargs: 'Any') -> 'HttpResponse':
+        project = kwargs.get('project')
+        location_id = kwargs.get('location_id', '')
+        image_id = kwargs.get('image_id', '')
+
         location = models.Location.objects.filter(
-            pk=kwargs.get('location_id', ''),
-            project__name=kwargs.get('project'),
+            pk=location_id,
+            project__name=project,
         ).first()
         photosphere = models.PhotoSphere.objects.filter(
-            pk=kwargs.get('image_id', ''),
-            location_id=kwargs.get('location_id', ''),
+            pk=image_id,
+            location_id=location_id,
         ).first()
 
-        if not location:
+        if not location and project:
             project = (
                 models.Project.objects.filter(
                     name=kwargs['project'],
@@ -65,17 +69,18 @@ class RenderPhotosphereView(TemplateView):
                 .first()
             )
 
-            kwargs['location_id'] = project.main_location_id
-            kwargs['image_id'] = project.main_sphere__id
+            location_id = project.main_location_id
+            image_id = project.main_sphere__id
 
-            return redirect('render-photosphere', **kwargs)
+        if not photosphere and location:
+            image_id = location.main_sphere_id
 
-        if not photosphere:
-            kwargs['image_id'] = location.main_sphere_id
-
-            return redirect('render-photosphere', **kwargs)
-
-        context = self.get_context_data(**kwargs)
+        context = self.get_context_data(
+            project=project,
+            location_id=location_id,
+            image_id=image_id,
+            is_superuser=str(self.request.user.is_superuser).lower(),
+        )
 
         return self.render_to_response(context)
 
