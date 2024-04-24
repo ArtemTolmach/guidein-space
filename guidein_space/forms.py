@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 User = get_user_model()
 
 
-class UserCreationForm(DjangoUserCreationForm):
+class UserCreationForm(DjangoUserCreationForm[models.User]):
     email = forms.EmailField(
         label=_('Email'),
         max_length=254,
@@ -25,7 +25,7 @@ class UserCreationForm(DjangoUserCreationForm):
         fields = ('username', 'email')
 
 
-class ProjectForm(forms.ModelForm):
+class ProjectForm(forms.ModelForm[models.Project]):
     class Meta:
         model = models.Project
         fields = forms.ALL_FIELDS
@@ -43,7 +43,7 @@ class ProjectForm(forms.ModelForm):
         self.fields['main_location'].queryset = queryset
 
 
-class LocationForm(forms.ModelForm):
+class LocationForm(forms.ModelForm[models.Location]):
     class Meta:
         model = models.Location
         fields = forms.ALL_FIELDS

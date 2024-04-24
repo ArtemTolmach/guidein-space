@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import django_stubs_ext
 from django.utils.translation import gettext_lazy
 from dotenv import load_dotenv
 
+django_stubs_ext.monkeypatch()
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

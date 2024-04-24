@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from django.http.response import HttpResponse, HttpResponseBase, HttpResponseRedirect
 
 
-class RegisterView(FormView):
+class RegisterView(FormView[UserCreationForm]):
     template_name = 'registration/register.html'
     form_class = UserCreationForm
 
@@ -28,7 +28,7 @@ class RegisterView(FormView):
         return redirect(next_url)
 
 
-class IndexView(ListView):
+class IndexView(ListView[models.Project]):
     template_name = 'guidein_space/index.html'
     queryset = models.Project.objects.annotate(
         main_sphere__id=F('main_location__main_sphere__id'),
@@ -94,12 +94,12 @@ class RenderPhotosphereView(TemplateView):
         return context
 
 
-class GetPhotosphereView(generics.RetrieveAPIView):
+class GetPhotosphereView(generics.RetrieveAPIView[models.PhotoSphere]):
     queryset = models.PhotoSphere.objects.all()
     serializer_class = serializers.PhotoSphereSerializer
 
 
-class GetProjectLocationsView(generics.ListAPIView):
+class GetProjectLocationsView(generics.ListAPIView[models.Location]):
     serializer_class = serializers.ProjectLocationSerializer
     lookup_field = 'project__name'
     lookup_url_kwarg = 'project'
@@ -111,7 +111,7 @@ class GetProjectLocationsView(generics.ListAPIView):
         )
 
 
-class GetLocationPhotospheresView(generics.ListAPIView):
+class GetLocationPhotospheresView(generics.ListAPIView[models.PhotoSphere]):
     serializer_class = serializers.LocationPhotoSphereSerializer
     lookup_field = 'location__id'
     lookup_url_kwarg = 'location'
@@ -120,37 +120,37 @@ class GetLocationPhotospheresView(generics.ListAPIView):
         return models.PhotoSphere.objects.filter(location__id=self.kwargs['location_id'])
 
 
-class CreateInformationPointView(generics.CreateAPIView):
+class CreateInformationPointView(generics.CreateAPIView[models.InformationPoint]):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.InformationPoint.objects.all()
     serializer_class = serializers.InformationPointSerializer
 
 
-class CreateMovePointView(generics.CreateAPIView):
+class CreateMovePointView(generics.CreateAPIView[models.MovePoint]):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.MovePoint.objects.all()
     serializer_class = serializers.MovePointSerializer
 
 
-class CreatePolygonPointView(generics.CreateAPIView):
+class CreatePolygonPointView(generics.CreateAPIView[models.PolygonPoint]):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.PolygonPoint.objects.all()
     serializer_class = serializers.PolygonPointSerializer
 
 
-class CreateVideoPointView(generics.CreateAPIView):
+class CreateVideoPointView(generics.CreateAPIView[models.VideoPoint]):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.VideoPoint.objects.all()
     serializer_class = serializers.VideoPointSerializer
 
 
-class CreateImagePointView(generics.CreateAPIView):
+class CreateImagePointView(generics.CreateAPIView[models.ImagePoint]):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.ImagePoint.objects.all()
     serializer_class = serializers.ImagePointSerializer
 
 
-class CreatePolyLinePointView(generics.CreateAPIView):
+class CreatePolyLinePointView(generics.CreateAPIView[models.PolyLinePoint]):
     permission_classes = (permissions.IsAdminUser,)
     queryset = models.PolyLinePoint.objects.all()
     serializer_class = serializers.PolyLinePointSerializer
