@@ -142,7 +142,7 @@ class PolygonPoint(models.Model):
     )
     coordinates = models.JSONField(
         blank=True,
-        default=[],
+        default=list,
         verbose_name='Координаты точек полигона',
     )
     opacity = models.CharField(max_length=20, default='1', verbose_name='Прозрачность полигона')
@@ -212,7 +212,7 @@ class PolyLinePoint(models.Model):
         related_name='polyline_points',
         verbose_name='Фотосфера',
     )
-    coordinates = models.JSONField(blank=True, default=[], verbose_name='Координаты точек линии')
+    coordinates = models.JSONField(blank=True, default=list, verbose_name='Координаты точек линии')
 
     title = models.CharField(max_length=255, blank=True, verbose_name='Заголовок')
     description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
