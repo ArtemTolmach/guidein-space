@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
-AUTH_USER_MODEL = 'guidein_space.User'
+AUTH_USER_MODEL = 'guidein_space.USER'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -65,6 +65,9 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {

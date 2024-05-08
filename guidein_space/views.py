@@ -1,22 +1,17 @@
-from django.contrib.auth import login
-from django.shortcuts import redirect
-from django.views.generic import FormView
 from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from guidein_space import models, serializers
-from guidein_space.forms import UserCreationForm
+from guidein_space.serializers import UserSerializer
 
 
-class RegisterView(FormView):
-    template_name = 'registration/register.html'
-    form_class = UserCreationForm
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-
-        next_url = self.request.GET.get('next', 'index')
-        return redirect(next_url)
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 class GetPhotosphereView(generics.RetrieveAPIView):
