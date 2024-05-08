@@ -6,7 +6,7 @@ from drf_spectacular import views as spectacular_views
 from guidein_space import views
 
 urlpatterns = [
-    path('register/', views.RegisterView.as_view(), name='register'),
+    path('api/register', views.RegisterView.as_view(), name='register'),
     path('api/schema/', spectacular_views.SpectacularAPIView.as_view(), name='schema'),
     path(
         'api/schema/swagger-ui/',

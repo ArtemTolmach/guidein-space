@@ -6,16 +6,13 @@ from django.db import models
 
 
 class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('superuser', 'Superuser'),
-        ('regular', 'Regular User'),
-    )
-    role = models.CharField(
-        max_length=20,
-        choices=ROLE_CHOICES,
-        default='regular',
-        verbose_name='Роль',
-    )
+    name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    username = models.CharField(max_length=255, unique=True)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ('email', 'name')
 
 
 class Project(models.Model):
