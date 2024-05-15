@@ -2,11 +2,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from drf_spectacular import views as spectacular_views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from guidein_space import views
 
 urlpatterns = [
     path('api/register', views.RegisterView.as_view(), name='register'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/schema/', spectacular_views.SpectacularAPIView.as_view(), name='schema'),
     path(
         'api/schema/swagger-ui/',
