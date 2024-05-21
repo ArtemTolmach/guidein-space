@@ -1,4 +1,4 @@
-Django==5.0.0
+Django[argon2]==5.0.0
 djangorestframework==3.14.0
 django-colorfield==0.11.0
 drf-spectacular[sidecar]==0.27.1
