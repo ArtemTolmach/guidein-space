@@ -1,8 +1,12 @@
 import uuid
+from typing import TYPE_CHECKING
 
-from colorfield.fields import ColorField
+from colorfield.fields import ColorField  # type: ignore[import-untyped]
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+if TYPE_CHECKING:
+    from typing import Self
 
 
 class User(AbstractUser):
@@ -39,7 +43,7 @@ class Project(models.Model):
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return self.name
 
 
@@ -64,7 +68,7 @@ class Location(models.Model):
         verbose_name = 'Локация'
         verbose_name_plural = 'Локации'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return self.name
 
 
@@ -82,7 +86,7 @@ class PhotoSphere(models.Model):
         verbose_name = 'Фотосфера'
         verbose_name_plural = 'Фотосферы'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return self.name
 
 
@@ -107,7 +111,7 @@ class MovePoint(models.Model):
         verbose_name = 'Точка перемещения'
         verbose_name_plural = 'Точки перемещения'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return f'Точка перемещения #{self.id}'
 
 
@@ -128,7 +132,7 @@ class InformationPoint(models.Model):
         verbose_name = 'Точка информации'
         verbose_name_plural = 'Точки информации'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return f'Точка информации #{self.id}'
 
 
@@ -156,7 +160,7 @@ class PolygonPoint(models.Model):
         verbose_name = 'Полигон'
         verbose_name_plural = 'Полигоны'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return f'Полигон #{self.id}'
 
 
@@ -181,7 +185,7 @@ class VideoPoint(models.Model):
         verbose_name = 'Видео'
         verbose_name_plural = 'Видео'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return f'Видео #{self.id}'
 
 
@@ -200,7 +204,7 @@ class ImagePoint(models.Model):
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return f'Изображение #{self.id}'
 
 
@@ -238,5 +242,5 @@ class PolyLinePoint(models.Model):
         verbose_name = 'Линия'
         verbose_name_plural = 'Линии'
 
-    def __str__(self):
+    def __str__(self: 'Self') -> str:
         return f'Линия #{self.id}'
