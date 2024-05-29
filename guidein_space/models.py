@@ -105,7 +105,7 @@ class MovePoint(models.Model):
         verbose_name_plural = 'Точки перемещения'
 
     def __str__(self):
-        return f'Точка перемещения #{self.id}'
+        return f'Точка перемещения {self.target_photo_sphere or self.id}'
 
 
 class InformationPoint(models.Model):
@@ -126,7 +126,7 @@ class InformationPoint(models.Model):
         verbose_name_plural = 'Точки информации'
 
     def __str__(self):
-        return f'Точка информации #{self.id}'
+        return f'Точка информации {self.title or self.id}'
 
 
 class PolygonPoint(models.Model):
@@ -154,7 +154,7 @@ class PolygonPoint(models.Model):
         verbose_name_plural = 'Полигоны'
 
     def __str__(self):
-        return f'Полигон #{self.id}'
+        return f'Полигон {self.title or self.id}'
 
 
 class VideoPoint(models.Model):
@@ -179,7 +179,7 @@ class VideoPoint(models.Model):
         verbose_name_plural = 'Видео'
 
     def __str__(self):
-        return f'Видео #{self.id}'
+        return f'Видео {self.video or self.id}'
 
 
 class ImagePoint(models.Model):
@@ -198,7 +198,7 @@ class ImagePoint(models.Model):
         verbose_name_plural = 'Изображения'
 
     def __str__(self):
-        return f'Изображение #{self.id}'
+        return f'Изображение {self.image or self.id}'
 
 
 class PolyLinePoint(models.Model):
@@ -236,4 +236,4 @@ class PolyLinePoint(models.Model):
         verbose_name_plural = 'Линии'
 
     def __str__(self):
-        return f'Линия #{self.id}'
+        return f'Линия {self.title or self.id}'
