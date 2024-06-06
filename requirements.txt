@@ -6,4 +6,3 @@ drf-spectacular[sidecar]==0.27.1
 gunicorn==21.2.0
 Pillow==10.1.0
 python-dotenv==1.0.1
-whitenoise==6.6.0
