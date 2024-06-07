@@ -18,6 +18,12 @@ SECRET_KEY=secret
 CORS_ALLOWED_ORIGINS=http://localhost:3000
 CORS_TRUSTED_ORIGINS=http://localhost:3000
 CORS_ALLOW_CREDENTIALS=True
+
+PG_NAME=gispace
+PG_USER=postgres
+PG_PASSWORD=secret
+PG_HOST=localhost
+PG_PORT=5432
 ```
 
 Затем создаем виртуальное окружение и устанавливаем в него зависимости (*при первой установке приложения*):

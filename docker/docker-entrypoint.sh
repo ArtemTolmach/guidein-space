@@ -14,6 +14,16 @@ export CORS_TRUSTED_ORIGINS=${CORS_TRUSTED_ORIGINS:=http://localhost:3000}
 
 export CORS_TRUSTED_ORIGINS=${CORS_TRUSTED_ORIGINS:=True}
 
+export PG_NAME=${PG_NAME:=gispace}
+
+export PG_USER=${PG_USER:=postgres}
+
+export PG_PASSWORD=${PG_PASSWORD:=secret}
+
+export PG_HOST=${PG_HOST:=localhost}
+
+export PG_PORT=${PG_PORT:=5432}
+
 set +x
 
 python3 manage.py migrate
