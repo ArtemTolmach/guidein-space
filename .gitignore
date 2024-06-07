@@ -1,5 +1,6 @@
 __pycache__
 .env*
 .idea
+.python-version
 *.sqlite3
 pyrightconfig.json
